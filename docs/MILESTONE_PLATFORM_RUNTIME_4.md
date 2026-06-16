@@ -1,72 +1,80 @@
-# Milestone 4 — App Settings + Vault Plugin State
+# Milestone 4 — App Settings + Vault Plugin State + First Run UI
 
-## Что реализовано
+**Дата:** 2026-06-17
+**Статус:** ✅ Завершён
 
-### App Settings Core
-- Пакет `internal/core/appsettings/`
+## Цель
+
+Сделать нормальную модель настроек приложения, выбор vault при первом запуске, и enable/disable плагинов через vault plugin state.
+
+## Что сделано
+
+### 1. App Settings Core (`internal/core/appsettings/`)
+
+- `manager.go` — Load/Save/Update, recent vaults, defaults, corrupt config recovery
+- `manager_test.go` — 6 тестов
 - Хранение: `~/.config/verstak/config.json`
-- API: Load, Save, Update, SetCurrentVault, ClearCurrentVault
-- Поля: currentVaultPath, recentVaults, theme, devMode, userPluginsDir, windowState
-- Auto-open vault при запуске если currentVaultPath валиден
-- Corrupt config → backup + defaults с понятной ошибкой
+- Поля: currentVaultPath, recentVaults, theme, devMode, userPluginsDir, windowState, lastOpenedAt
+- Правила: defaults при отсутствии, backup+recovery при битом config, без secrets
 
-### Vault Plugin State
-- Пакет `internal/core/pluginstate/`
+### 2. Vault Plugin State (`internal/core/pluginstate/`)
+
+- `manager.go` — enable/disable, desired plugins, missing-installed tracking
+- `manager_test.go` — 7 тестов
 - Хранение: `<vault>/.verstak/plugins.json`
-- API: Load, Save, EnablePlugin, DisablePlugin, IsEnabled, IsDisabled, RecordDesiredPlugin, ListMissingInstalled
-- Disabled plugin не регистрирует provides/contributions
-- Desired plugins для будущей синхронизации
-- Missing installed plugins tracking
+- Поля: enabledPlugins, disabledPlugins, desiredPlugins, updatedAt
+- Installed ≠ Enabled ≠ Desired
 
-### Wails API
-- GetAppSettings, UpdateAppSettings
-- GetVaultPluginState, EnablePlugin, DisablePlugin
+### 3. Wails API (app.go)
 
-### Lifecycle Integration
-- main.go: init app settings → auto-open vault → init plugin state → plugin discovery
-- Disabled plugins пропускаются в lifecycle (не регистрируют capabilities/contributions)
-- ReloadPlugins: проверка disabled state
+- `GetAppSettings()` / `UpdateAppSettings(patch)` / `SetCurrentVault(path)`
+- `GetVaultPluginState()` / `EnablePlugin(id)` / `DisablePlugin(id)`
+- `SetCurrentVault` вызывает `OpenVault` + сохраняет в app settings + загружает plugin state
+
+### 4. First Run / Vault Selection UI (VaultSelection.svelte)
+
+- Показывается когда currentVaultPath пустой или vault не открывается
+- Create New Vault → CreateVault → OpenVault → SetCurrentVault
+- Open Existing Vault → OpenVault → SetCurrentVault
+- Recent Vaults → OpenVault → SetCurrentVault
+- Понятные ошибки при неудаче
+
+### 5. Sidebar Navigation (Sidebar.svelte)
+
+- Ширина 220px, фиксированная
+- Навигация: Plugin Manager
+- Plugin sidebar items (из contributions)
+- Vault status indicator
+- Отступы и hover-эффекты
+
+### 6. Plugin Manager Integration
+
+- Enable/Disable toggle в PluginCard
+- Disabled plugin не регистрирует capabilities/contributions
+- Missing installed plugins — отдельная секция
+- Vault state загружается при открытии
+
+### 7. Layout Fixes
+
+- App.svelte: global reset (margin, padding, box-sizing)
+- PluginManager: отступы header, border-bottom separator
+- Content area: padding 1.5rem
 
 ## Тесты
 
-### App Settings (6 тестов)
-- TestLoad_DefaultCreation
-- TestLoad_CorruptConfig
-- TestSetCurrentVault
-- TestRecentVaults_NoDuplicates
-- TestUpdate_Patch
-- TestAppSettings_NotInsideVault
-
-### Plugin State (7 тестов)
-- TestLoad_DefaultCreation
-- TestEnableDisable
-- TestDisablePlugin_Persists
-- TestRecordDesiredPlugin
-- TestMissingInstalled
-- TestCorruptPluginsJSON
-- TestVaultClosed_StateUnavailable
-
-## Верификация
-
-| command | result | notes |
-|---------|--------|-------|
-| `go test ./...` | ✅ | 52 PASS (39 prev + 6 appsettings + 7 pluginstate) |
-| `./scripts/check.sh` | ✅ | go vet + gofmt + go mod tidy OK |
-| `./scripts/build.sh` | ✅ | wails build OK |
+- `go test ./...` — 52 PASS (6 appsettings + 7 pluginstate + 39 previous)
+- `./scripts/check.sh` — ✅
+- `./scripts/smoke-platform.sh` — ✅ (enable/disable/plugins.json verification)
+- `./scripts/build.sh` — ✅
 
 ## Структура файлов
 
 ```
-~/.config/verstak/
-  config.json          — app settings (local, NOT in vault)
-
-<vault>/
-  .verstak/
-    vault.json         — vault metadata
-    plugins.json       — vault plugin state
-    plugin-data/       — per-plugin data namespace
-    plugin-settings/   — per-plugin settings namespace
-    plugin-cache/      — per-plugin cache namespace
+~/.config/verstak/config.json          ← app settings (local)
+<vault>/.verstak/plugins.json          ← vault plugin state
+<vault>/.verstak/plugin-settings/<id>/ ← per-plugin settings
+<vault>/.verstak/plugin-data/<id>/     ← per-plugin data
+<vault>/.verstak/plugin-cache/<id>/    ← per-plugin cache
 ```
 
 ## Пример plugins.json
@@ -87,14 +95,13 @@
 }
 ```
 
-## Статус platform-test
-- DEGRADED — только из-за missing optional `verstak/core/sync/v1`
-- Enable/disable работает через vault plugin state
-- При disabled: provides не регистрируются, contributions не показываются
-- При enabled: всё возвращается
+## Исправление отчёта Milestone 3
 
-## Что НЕ сделано
-- Notes/files/editor/sync
+В отчёте Milestone 3 была арифметическая ошибка: написано "24/24 PASS", реально — **39 PASS** (16 plugin + 8 storage + 7 vault + 8 other). Исправлено в документации.
+
+## Что НЕ сделано (будет в следующих milestone)
+
+- Notes/files/editor/sync plugins
+- Plugin marketplace/distribution
 - Auto-install plugins
-- First Run / Vault Selection UI (только backend, UI не готов)
-- Plugin Manager enable/disable toggle (только backend API)
+- Advanced window state management

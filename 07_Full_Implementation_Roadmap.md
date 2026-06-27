@@ -84,7 +84,7 @@ storage as ordinary Markdown/files.
 Tasks:
 
 - improve Notes list filtering, sorting, rename/conflict UX, and empty states;
-- add Notes delete/trash through Files API with confirmation;
+- [x] add Notes delete/trash through Files API with confirmation;
 - add Files restore metadata view and later restore command;
 - [x] define external open/show-in-folder as a public v2 API, replacing fallback;
 - add watcher-based refresh for Files/Notes after external changes;
@@ -102,11 +102,11 @@ Goal: make cross-device sync reliable enough for real vaults.
 Tasks:
 
 - define conflict UX contract for desktop and sync plugin;
-- add server/device token lifecycle tests, revocation checks, and audit coverage;
+- [x] add server/device revocation checks for sync auth paths;
 - persist and display sync errors in Sync plugin;
 - add retry/backoff for sync client operations;
-- add real two-vault sync smoke scenarios for create/update/move/trash folders
-  and files;
+- [x] add real two-vault sync smoke scenarios for create/update/move/trash
+  folders and files;
 - document deployment and backup procedures for `verstak-sync-server`.
 
 Verification:
@@ -212,8 +212,8 @@ Verification:
 1. [x] Command Palette UI host in `verstak-desktop`.
 2. [x] Status bar item host in `verstak-desktop`.
 3. [x] External open public v2 API to replace Files fallback.
-4. Notes trash/delete UX in `verstak-official-plugins`.
-5. Sync hardening pass with expanded real two-vault smoke.
+4. [x] Notes trash/delete UX in `verstak-official-plugins`.
+5. [x] Sync hardening pass with expanded real two-vault smoke.
 6. Browser inbox protocol design, then plugin and extension implementation.
 
 This order finishes generic platform surfaces before building product features

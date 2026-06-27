@@ -37,6 +37,7 @@ Implemented:
 - public `files.openExternal` / `files.showInFolder` API and Files plugin usage;
 - Workbench open/edit provider routing and default editor plugin;
 - official Files plugin, Notes plugin, Sync plugin, and platform-test plugin;
+- browser inbox local receiver and minimal official Browser Inbox plugin;
 - sync server with device/user auth and operation push/pull;
 - SDK manifest/types/schema coverage for current plugin APIs;
 - automated Go, frontend, official plugin, SDK, and real-sync smoke checks.
@@ -51,7 +52,8 @@ Known remaining gaps:
 - Markdown/file preview, activity, journal, browser inbox receiver/plugin, search, secrets, and
   templates plugins are not complete product features.
 - Browser extension repository has protocol, queue, and Chromium/Firefox build
-  scaffold, but no paired desktop local receiver yet.
+  scaffold; desktop has a local receiver and mounted-view inbox plugin, but no
+  pairing model, domain binding, or conversion workflow yet.
 - Packaging/update/release workflow is not product-grade yet.
 
 ## 4. Implementation Phases
@@ -141,7 +143,8 @@ receiver and an official inbox plugin.
 Tasks:
 
 - [x] define browser capture payload protocol;
-- implement `verstak.browser-inbox` plugin with pending queue;
+- [x] implement minimal `verstak.browser-inbox` plugin with a plugin-scoped
+  pending queue;
 - [x] implement browser extension capture scaffold for URL, selected text,
   page title, and link captures;
 - define local receiver permission/pairing model;
@@ -216,8 +219,9 @@ Verification:
 3. [x] External open public v2 API to replace Files fallback.
 4. [x] Notes trash/delete UX in `verstak-official-plugins`.
 5. [x] Sync hardening pass with expanded real two-vault smoke.
-6. [~] Browser inbox protocol design and extension scaffold; receiver/plugin
-   implementation still requires local receiver host work.
+6. [~] Browser inbox protocol design, extension scaffold, local receiver, and
+   minimal inbox plugin are implemented; pairing, domain binding, and conversion
+   workflows remain.
 
 This order finishes generic platform surfaces before building product features
 that depend on them.

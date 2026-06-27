@@ -79,7 +79,7 @@ Plugin Manager UI - обязательный core-модуль.
 Для notes:
 
 - canonical folder: `Notes/`;
-- Overview note: `Notes/Overview.md`;
+- `Overview.md` is an ordinary Markdown filename when present, not a special UI entity;
 - title и filename должны быть синхронизированы;
 - filename строится из title как человекочитаемая безопасная проекция;
 - при конфликте имени операция не должна молча добавлять `_2`; нужен conflict dialog/suggestion.
@@ -118,4 +118,3 @@ Plugin Manager UI - обязательный core-модуль.
 - это contribution point?
 
 Если функция относится к заметкам, файлам, редакторам, просмотру, activity, journal, browser inbox, search, secrets, import/export - по умолчанию это плагин, а не core.
-

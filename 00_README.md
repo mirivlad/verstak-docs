@@ -15,7 +15,7 @@
 - [03_Repositories.md](03_Repositories.md) - разбиение на репозитории и назначение каждого.
 - [04_Plugin_System.md](04_Plugin_System.md) - динамические плагины, manifest, lifecycle, capabilities, settings, permissions.
 - [05_Official_Plugins.md](05_Official_Plugins.md) - состав официальных плагинов и их зависимости через capabilities.
-- [06_Migration_Strategy.md](06_Migration_Strategy.md) - как переходить от текущего приложения к платформе без потери смысла.
+- [06_Migration_Strategy.md](06_Migration_Strategy.md) - как развивать Verstak v2 как отдельную платформу без временных мостов к первой версии.
 - [AGENTS.md](AGENTS.md) - инструкция для coding agents, чтобы они не возвращали проект к монолиту.
 
 ## Главный архитектурный инвариант
@@ -33,4 +33,3 @@ Core не знает о конкретных функциях вроде "зам
 - UI shell.
 
 Все рабочие инструменты поставляются плагинами. Даже официальные плагины должны жить по тем же правилам, что и будущие сторонние.
-

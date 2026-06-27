@@ -35,15 +35,18 @@ search.provider
 
 - если есть подходящий editor capability, показывает "Edit";
 - если есть viewer/preview capability, показывает "Preview";
-- если нет, оставляет "Open externally".
+- если подходящего provider/capability нет, показывает понятное no-provider
+  состояние; открытие внешним приложением остается отдельной отложенной
+  возможностью.
 
 ## 2. `official.notes`
 
 Назначение:
 
-- markdown notes as first-class Verstak entities;
+- markdown notes as a UI-level context over ordinary Markdown files;
 - canonical `Notes/` folder inside case/project;
-- Overview note;
+- `Overview.md` is allowed only as an ordinary Markdown filename, not as a
+  special UI entity;
 - note metadata;
 - note links.
 
@@ -51,7 +54,6 @@ Provides:
 
 ```text
 workspace.notes
-entity.note
 note.registry
 ```
 
@@ -300,4 +302,3 @@ workspace.files
 - `official.browser-inbox`;
 
 Но все они должны быть настоящими динамическими плагинами, даже если поставляются вместе с приложением.
-

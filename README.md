@@ -9,7 +9,7 @@
 - [Repositories](03_Repositories.md) — разбиение на репозитории
 - [Plugin System](04_Plugin_System.md) — динамические плагины
 - [Official Plugins](05_Official_Plugins.md) — состав официальных плагинов
-- [Migration Strategy](06_Migration_Strategy.md) — план перехода
+- [Platform Development Strategy](06_Migration_Strategy.md) — план развития v2
 
 ## Схемы SDK
 

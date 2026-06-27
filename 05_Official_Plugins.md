@@ -136,10 +136,9 @@ view-only provider for `.md` / `.markdown` files.
 
 Назначение:
 
-- просмотр изображений;
-- просмотр text-like файлов;
-- базовый PDF/image metadata preview, если возможно;
-- fallback to system open.
+- read-only preview for text-like files through `api.files.readText`;
+- metadata view for image files until binary streaming exists;
+- `Open External` action through `api.files.openExternal`.
 
 Provides:
 
@@ -149,6 +148,9 @@ viewer.image
 viewer.text
 preview.file
 ```
+
+Текущий статус: базовый `verstak.file-preview` implemented as a view-only
+provider for text-like files and image metadata.
 
 ## 6. `official.activity`
 

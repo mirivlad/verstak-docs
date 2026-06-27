@@ -50,8 +50,10 @@ Known remaining gaps:
 - Sidecar host is not implemented.
 - Files/Notes are usable but not complete: restore, binary streaming, watcher,
   richer conflict UX, and Notes trash/delete UX are still incomplete.
-- File/image preview, activity, journal, browser inbox conversion workflow,
-  search, secrets, and templates plugins are not complete product features.
+- Activity, journal, browser inbox conversion workflow, search, secrets, and
+  templates plugins are not complete product features.
+- File/image preview exists as a basic provider, but image rendering still needs
+  binary streaming support for inline previews.
 - Browser extension repository has protocol, queue, and Chromium/Firefox build
   scaffold; desktop has a local receiver and mounted-view inbox plugin, but no
   pairing model, domain binding, or conversion workflow yet.
@@ -126,7 +128,7 @@ Goal: add the next visible product layer as replaceable plugins.
 Tasks:
 
 - [x] implement `verstak.markdown-preview` provider plugin;
-- implement basic file/image preview plugin;
+- [x] implement basic file/image preview plugin;
 - implement search provider/index contract and official search plugin;
 - implement activity event log plugin;
 - implement journal/worklog plugin that can consume activity suggestions.

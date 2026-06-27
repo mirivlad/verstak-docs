@@ -159,10 +159,12 @@ case.selected
 ```
 
 Текущий статус: базовый `verstak.activity` implemented as both a global sidebar
-view and a workspace item. It also contributes `activityProviders`, stores
-public plugin events in plugin-scoped settings, subscribes to
-file/note/browser/case activity events, and exposes a manual record/clear smoke
-path. Reconstruction and worklog suggestions are still future work.
+view and a workspace item. Workspace tabs store and display only their own
+activity stream; the global sidebar view aggregates activity from all workspace
+streams plus unscoped global activity. It also contributes `activityProviders`,
+subscribes to file/note/browser/case activity events, and exposes a manual
+record/clear smoke path. Reconstruction and worklog suggestions are still
+future work.
 
 ## 6. `official.journal`
 
@@ -220,8 +222,9 @@ search.provider
 ```
 
 Текущий статус: базовый `verstak.browser-inbox` implemented as both a global
-sidebar view and a workspace item. It keeps a plugin-scoped pending queue for
-browser capture events. Pairing, domain binding, and conversion into
+sidebar view and a workspace item. Workspace tabs keep their own pending queue;
+the global sidebar view aggregates queues from all workspaces plus unscoped
+global captures. Pairing, domain binding, and conversion into
 notes/links/files/activity are still future work.
 
 ## 9. `official.search`

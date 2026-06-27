@@ -135,7 +135,7 @@ Tasks:
 - [x] add type-as-you-search behavior and vault path/name matches to
   `verstak.search`;
 - [x] implement baseline `verstak.activity` event log plugin with
-  plugin-scoped storage and public event subscriptions;
+  workspace-scoped storage, global aggregation, and public event subscriptions;
 - [x] expose `verstak.activity` and `verstak.browser-inbox` as global sidebar
   views while keeping their workspace items;
 - implement persistent search index and cross-provider runtime hosting;
@@ -155,8 +155,8 @@ receiver and an official inbox plugin.
 Tasks:
 
 - [x] define browser capture payload protocol;
-- [x] implement minimal `verstak.browser-inbox` plugin with a plugin-scoped
-  pending queue;
+- [x] implement minimal `verstak.browser-inbox` plugin with workspace-scoped
+  pending queues and a global aggregate view;
 - [x] implement browser extension capture scaffold for URL, selected text,
   page title, and link captures;
 - define local receiver permission/pairing model;

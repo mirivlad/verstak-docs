@@ -158,6 +158,12 @@ browser.capture.received
 case.selected
 ```
 
+Текущий статус: базовый `verstak.activity` implemented as a workspace item and
+`activityProviders` contribution. It stores public plugin events in
+plugin-scoped settings, subscribes to file/note/browser/case activity events,
+and exposes a manual record/clear smoke path. Reconstruction and worklog
+suggestions are still future work.
+
 ## 6. `official.journal`
 
 Назначение:

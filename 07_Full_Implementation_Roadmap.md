@@ -134,8 +134,10 @@ Tasks:
   `searchProviders` in contribution summaries;
 - [x] add type-as-you-search behavior and vault path/name matches to
   `verstak.search`;
+- [x] implement baseline `verstak.activity` event log plugin with
+  plugin-scoped storage and public event subscriptions;
 - implement persistent search index and cross-provider runtime hosting;
-- implement activity event log plugin;
+- implement activity reconstruction and worklog suggestions;
 - implement journal/worklog plugin that can consume activity suggestions.
 
 Verification:

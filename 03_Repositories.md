@@ -45,7 +45,6 @@ plugins/
   files/
   notes/
   markdown-editor/
-  markdown-preview/
   file-preview/
   activity/
   journal/
@@ -170,4 +169,3 @@ verstak-official-plugins - один repo для официальных плаг�
 ```
 
 Core может загрузить плагин только при совместимости `apiVersion`.
-

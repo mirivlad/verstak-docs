@@ -36,7 +36,7 @@ Implemented:
 - Files Core text API with safe path policy and sync operation recording;
 - public `files.openExternal` / `files.showInFolder` API and Files plugin usage;
 - mode-aware Workbench open/edit provider routing and default editor plugin;
-- official Files plugin, Notes plugin, Markdown Preview plugin, Sync plugin, and
+- official Files plugin, Notes plugin, Markdown Editor plugin, Sync plugin, and
   platform-test plugin;
 - browser inbox local receiver and minimal official Browser Inbox plugin;
 - sync server with device/user auth and operation push/pull;
@@ -127,8 +127,9 @@ Goal: add the next visible product layer as replaceable plugins.
 
 Tasks:
 
-- [x] implement `verstak.markdown-preview` provider plugin;
-- [x] implement basic file/image preview plugin;
+- [x] keep Markdown preview inside `verstak.markdown-editor`, with no separate
+  provider competing for `.md` files;
+- [x] implement basic image metadata preview plugin;
 - implement search provider/index contract and official search plugin;
 - implement activity event log plugin;
 - implement journal/worklog plugin that can consume activity suggestions.

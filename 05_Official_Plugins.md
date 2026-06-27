@@ -98,7 +98,7 @@ editor.note.markdown
 Optional requires:
 
 ```text
-preview.markdown
+link.resolver
 ```
 
 Не должен:
@@ -107,36 +107,14 @@ preview.markdown
 - напрямую зависеть от `official.notes`;
 - тащить file manager внутрь себя.
 
-## 4. `official.markdown-preview`
+Markdown preview is part of the Markdown editor surface. There is no separate
+official Markdown preview plugin, because a standalone view provider would
+compete with the editor routing for `.md` / `.markdown` files.
+
+## 4. `official.file-preview`
 
 Назначение:
 
-- read-only markdown render through a Workbench `openProviders` contribution;
-- `mode: "view"` support so edit routing remains with editor plugins;
-- safe baseline markdown rendering before optional syntax highlight/link
-  resolver integration.
-
-Provides:
-
-```text
-preview.markdown
-viewer.markdown
-```
-
-Optional requires:
-
-```text
-link.resolver
-```
-
-Текущий статус: базовый `verstak.markdown-preview` implemented as an official
-view-only provider for `.md` / `.markdown` files.
-
-## 5. `official.file-preview`
-
-Назначение:
-
-- read-only preview for text-like files through `api.files.readText`;
 - metadata view for image files until binary streaming exists;
 - `Open External` action through `api.files.openExternal`.
 
@@ -145,14 +123,14 @@ Provides:
 ```text
 viewer.file
 viewer.image
-viewer.text
 preview.file
 ```
 
 Текущий статус: базовый `verstak.file-preview` implemented as a view-only
-provider for text-like files and image metadata.
+provider for image metadata. Text-like files, code, and Markdown stay with
+editor plugins.
 
-## 6. `official.activity`
+## 5. `official.activity`
 
 Назначение:
 
@@ -180,7 +158,7 @@ browser.capture.received
 case.selected
 ```
 
-## 7. `official.journal`
+## 6. `official.journal`
 
 Назначение:
 
@@ -203,7 +181,7 @@ Optional requires:
 activity.reconstruction
 ```
 
-## 8. `official.browser-inbox`
+## 7. `official.browser-inbox`
 
 Назначение:
 
@@ -303,7 +281,7 @@ workspace.files
 - `official.files`;
 - `official.notes`;
 - `official.markdown-editor`;
-- `official.markdown-preview`;
+- `official.file-preview`;
 - `official.activity`;
 - `official.browser-inbox`;
 

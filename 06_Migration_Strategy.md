@@ -87,10 +87,10 @@ Verstak v2 разрабатывается как отдельное прилож
 
 Развивать official plugins по одному, через общий plugin runtime:
 
-1. `official.markdown-preview`;
-2. `official.markdown-editor`;
-3. `official.files`;
-4. `official.notes`;
+1. `official.markdown-editor`;
+2. `official.files`;
+3. `official.notes`;
+4. `official.file-preview`;
 5. `official.activity`;
 6. `official.browser-inbox`.
 

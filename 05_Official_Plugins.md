@@ -158,11 +158,11 @@ browser.capture.received
 case.selected
 ```
 
-Текущий статус: базовый `verstak.activity` implemented as a workspace item and
-`activityProviders` contribution. It stores public plugin events in
-plugin-scoped settings, subscribes to file/note/browser/case activity events,
-and exposes a manual record/clear smoke path. Reconstruction and worklog
-suggestions are still future work.
+Текущий статус: базовый `verstak.activity` implemented as both a global sidebar
+view and a workspace item. It also contributes `activityProviders`, stores
+public plugin events in plugin-scoped settings, subscribes to
+file/note/browser/case activity events, and exposes a manual record/clear smoke
+path. Reconstruction and worklog suggestions are still future work.
 
 ## 6. `official.journal`
 
@@ -218,6 +218,11 @@ workspace.notes
 activity.log
 search.provider
 ```
+
+Текущий статус: базовый `verstak.browser-inbox` implemented as both a global
+sidebar view and a workspace item. It keeps a plugin-scoped pending queue for
+browser capture events. Pairing, domain binding, and conversion into
+notes/links/files/activity are still future work.
 
 ## 9. `official.search`
 

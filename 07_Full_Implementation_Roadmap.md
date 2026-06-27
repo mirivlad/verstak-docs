@@ -31,7 +31,7 @@ Implemented:
 - capability, permission, contribution, event, settings, storage foundations;
 - bundled frontend plugin host and `VerstakPluginAPI`;
 - Command Palette UI host for `commands` contributions;
-- Status Bar UI host for `statusBarItems` contributions;
+- Status Bar UI host for `statusBarItems`, vault status, and settings menu;
 - workspace top-level folder model and workspace item host;
 - Files Core text API with safe path policy and sync operation recording;
 - public `files.openExternal` / `files.showInFolder` API and Files plugin usage;
@@ -136,6 +136,8 @@ Tasks:
   `verstak.search`;
 - [x] implement baseline `verstak.activity` event log plugin with
   plugin-scoped storage and public event subscriptions;
+- [x] expose `verstak.activity` and `verstak.browser-inbox` as global sidebar
+  views while keeping their workspace items;
 - implement persistent search index and cross-provider runtime hosting;
 - implement activity reconstruction and worklog suggestions;
 - implement journal/worklog plugin that can consume activity suggestions.

@@ -48,9 +48,10 @@ Known remaining gaps:
 - Sidecar host is not implemented.
 - Files/Notes are usable but not complete: restore, binary streaming, watcher,
   richer conflict UX, and Notes trash/delete UX are still incomplete.
-- Markdown/file preview, activity, journal, browser inbox, search, secrets, and
+- Markdown/file preview, activity, journal, browser inbox receiver/plugin, search, secrets, and
   templates plugins are not complete product features.
-- Browser extension repository is only a stub.
+- Browser extension repository has protocol, queue, and Chromium/Firefox build
+  scaffold, but no paired desktop local receiver yet.
 - Packaging/update/release workflow is not product-grade yet.
 
 ## 4. Implementation Phases
@@ -139,10 +140,11 @@ receiver and an official inbox plugin.
 
 Tasks:
 
-- define local receiver protocol and permission model;
+- [x] define browser capture payload protocol;
 - implement `verstak.browser-inbox` plugin with pending queue;
-- implement browser extension capture for URL, selected text, page title, and
-  snippets;
+- [x] implement browser extension capture scaffold for URL, selected text,
+  page title, and link captures;
+- define local receiver permission/pairing model;
 - add domain-to-workspace binding;
 - convert inbox entries into notes/links/files/activity events through public
   plugin APIs.
@@ -214,7 +216,8 @@ Verification:
 3. [x] External open public v2 API to replace Files fallback.
 4. [x] Notes trash/delete UX in `verstak-official-plugins`.
 5. [x] Sync hardening pass with expanded real two-vault smoke.
-6. Browser inbox protocol design, then plugin and extension implementation.
+6. [~] Browser inbox protocol design and extension scaffold; receiver/plugin
+   implementation still requires local receiver host work.
 
 This order finishes generic platform surfaces before building product features
 that depend on them.

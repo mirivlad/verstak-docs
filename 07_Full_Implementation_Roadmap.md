@@ -30,8 +30,11 @@ Implemented:
 - plugin discovery, manifest validation, lifecycle states, enable/disable;
 - capability, permission, contribution, event, settings, storage foundations;
 - bundled frontend plugin host and `VerstakPluginAPI`;
+- Command Palette UI host for `commands` contributions;
+- Status Bar UI host for `statusBarItems` contributions;
 - workspace top-level folder model and workspace item host;
 - Files Core text API with safe path policy and sync operation recording;
+- public `files.openExternal` / `files.showInFolder` API and Files plugin usage;
 - Workbench open/edit provider routing and default editor plugin;
 - official Files plugin, Notes plugin, Sync plugin, and platform-test plugin;
 - sync server with device/user auth and operation push/pull;
@@ -40,13 +43,11 @@ Implemented:
 
 Known remaining gaps:
 
-- UI command palette host is missing even though `commands` contributions exist.
 - `fileActions`, `noteActions`, `contextMenuEntries`, `searchProviders`,
-  `activityProviders`, and `statusBarItems` have registry support but incomplete
-  UI/runtime hosting.
+  `activityProviders` have registry support but incomplete UI/runtime hosting.
 - Sidecar host is not implemented.
 - Files/Notes are usable but not complete: restore, binary streaming, watcher,
-  richer conflict UX, and external open API are deferred.
+  richer conflict UX, and Notes trash/delete UX are still incomplete.
 - Markdown/file preview, activity, journal, browser inbox, search, secrets, and
   templates plugins are not complete product features.
 - Browser extension repository is only a stub.
@@ -61,8 +62,8 @@ plugins.
 
 Tasks:
 
-- implement Command Palette UI for `commands` contributions;
-- host `statusBarItems`;
+- [x] implement Command Palette UI for `commands` contributions;
+- [x] host `statusBarItems`;
 - define and host generic `contextMenuEntries`;
 - host `fileActions` and `noteActions` through Files/Notes surfaces;
 - add lifecycle events for workspace creation, rename, trash, selection;
@@ -85,7 +86,7 @@ Tasks:
 - improve Notes list filtering, sorting, rename/conflict UX, and empty states;
 - add Notes delete/trash through Files API with confirmation;
 - add Files restore metadata view and later restore command;
-- define external open/show-in-folder as a public v2 API, replacing fallback;
+- [x] define external open/show-in-folder as a public v2 API, replacing fallback;
 - add watcher-based refresh for Files/Notes after external changes;
 - add safe binary read/streaming contract only after text workflows are stable.
 
@@ -208,9 +209,9 @@ Verification:
 
 ## 5. Immediate Execution Order
 
-1. Command Palette UI host in `verstak-desktop`.
-2. Status bar item host in `verstak-desktop`.
-3. External open public v2 API to replace Files fallback.
+1. [x] Command Palette UI host in `verstak-desktop`.
+2. [x] Status bar item host in `verstak-desktop`.
+3. [x] External open public v2 API to replace Files fallback.
 4. Notes trash/delete UX in `verstak-official-plugins`.
 5. Sync hardening pass with expanded real two-vault smoke.
 6. Browser inbox protocol design, then plugin and extension implementation.

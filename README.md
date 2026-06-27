@@ -10,6 +10,7 @@
 - [Plugin System](04_Plugin_System.md) — динамические плагины
 - [Official Plugins](05_Official_Plugins.md) — состав официальных плагинов
 - [Platform Development Strategy](06_Migration_Strategy.md) — план развития v2
+- [Full Implementation Roadmap](07_Full_Implementation_Roadmap.md) — путь до полной реализации Verstak2
 
 ## Схемы SDK
 

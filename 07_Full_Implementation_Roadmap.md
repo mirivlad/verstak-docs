@@ -132,6 +132,8 @@ Tasks:
 - [x] implement basic image metadata preview plugin;
 - [x] implement baseline `verstak.search` workspace plugin and expose
   `searchProviders` in contribution summaries;
+- [x] add type-as-you-search behavior and vault path/name matches to
+  `verstak.search`;
 - implement persistent search index and cross-provider runtime hosting;
 - implement activity event log plugin;
 - implement journal/worklog plugin that can consume activity suggestions.

@@ -232,9 +232,11 @@ search.indexer
 ```
 
 Текущий статус: базовый `verstak.search` implemented as a workspace item and
-`searchProviders` contribution. It searches text-like vault files through
-`api.files.list` / `api.files.readText` and opens results through Workbench.
-Persistent indexing and cross-provider runtime hosting are still future work.
+`searchProviders` contribution. It searches as the user types, matches vault
+file/folder names and paths, scans text-like file contents through
+`api.files.list` / `api.files.readText`, and opens file results through
+Workbench. Persistent indexing and cross-provider runtime hosting are still
+future work.
 
 ## 10. `official.secrets`
 

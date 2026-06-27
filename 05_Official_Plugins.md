@@ -111,9 +111,10 @@ preview.markdown
 
 Назначение:
 
-- безопасный markdown render;
-- internal `verstak://` links;
-- optional syntax highlight.
+- read-only markdown render through a Workbench `openProviders` contribution;
+- `mode: "view"` support so edit routing remains with editor plugins;
+- safe baseline markdown rendering before optional syntax highlight/link
+  resolver integration.
 
 Provides:
 
@@ -127,6 +128,9 @@ Optional requires:
 ```text
 link.resolver
 ```
+
+Текущий статус: базовый `verstak.markdown-preview` implemented as an official
+view-only provider for `.md` / `.markdown` files.
 
 ## 5. `official.file-preview`
 

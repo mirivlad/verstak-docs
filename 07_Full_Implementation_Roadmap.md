@@ -35,8 +35,9 @@ Implemented:
 - workspace top-level folder model and workspace item host;
 - Files Core text API with safe path policy and sync operation recording;
 - public `files.openExternal` / `files.showInFolder` API and Files plugin usage;
-- Workbench open/edit provider routing and default editor plugin;
-- official Files plugin, Notes plugin, Sync plugin, and platform-test plugin;
+- mode-aware Workbench open/edit provider routing and default editor plugin;
+- official Files plugin, Notes plugin, Markdown Preview plugin, Sync plugin, and
+  platform-test plugin;
 - browser inbox local receiver and minimal official Browser Inbox plugin;
 - sync server with device/user auth and operation push/pull;
 - SDK manifest/types/schema coverage for current plugin APIs;
@@ -49,8 +50,8 @@ Known remaining gaps:
 - Sidecar host is not implemented.
 - Files/Notes are usable but not complete: restore, binary streaming, watcher,
   richer conflict UX, and Notes trash/delete UX are still incomplete.
-- Markdown/file preview, activity, journal, browser inbox receiver/plugin, search, secrets, and
-  templates plugins are not complete product features.
+- File/image preview, activity, journal, browser inbox conversion workflow,
+  search, secrets, and templates plugins are not complete product features.
 - Browser extension repository has protocol, queue, and Chromium/Firefox build
   scaffold; desktop has a local receiver and mounted-view inbox plugin, but no
   pairing model, domain binding, or conversion workflow yet.
@@ -124,7 +125,7 @@ Goal: add the next visible product layer as replaceable plugins.
 
 Tasks:
 
-- implement `verstak.markdown-preview` provider plugin;
+- [x] implement `verstak.markdown-preview` provider plugin;
 - implement basic file/image preview plugin;
 - implement search provider/index contract and official search plugin;
 - implement activity event log plugin;

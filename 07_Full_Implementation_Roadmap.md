@@ -36,8 +36,8 @@ Implemented:
 - Files Core text API with safe path policy and sync operation recording;
 - public `files.openExternal` / `files.showInFolder` API and Files plugin usage;
 - mode-aware Workbench open/edit provider routing and default editor plugin;
-- official Files plugin, Notes plugin, Markdown Editor plugin, Sync plugin, and
-  platform-test plugin;
+- official Files plugin, Notes plugin, Markdown Editor plugin, Search plugin,
+  Sync plugin, and platform-test plugin;
 - browser inbox local receiver and minimal official Browser Inbox plugin;
 - sync server with device/user auth and operation push/pull;
 - SDK manifest/types/schema coverage for current plugin APIs;
@@ -45,13 +45,13 @@ Implemented:
 
 Known remaining gaps:
 
-- `fileActions`, `noteActions`, `contextMenuEntries`, `searchProviders`,
-  `activityProviders` have registry support but incomplete UI/runtime hosting.
+- `fileActions`, `noteActions`, `contextMenuEntries`, and `activityProviders`
+  have registry support but incomplete UI/runtime hosting.
 - Sidecar host is not implemented.
 - Files/Notes are usable but not complete: restore, binary streaming, watcher,
   richer conflict UX, and Notes trash/delete UX are still incomplete.
-- Activity, journal, browser inbox conversion workflow, search, secrets, and
-  templates plugins are not complete product features.
+- Activity, journal, browser inbox conversion workflow, indexed search,
+  secrets, and templates plugins are not complete product features.
 - File/image preview exists as a basic provider, but image rendering still needs
   binary streaming support for inline previews.
 - Browser extension repository has protocol, queue, and Chromium/Firefox build
@@ -130,7 +130,9 @@ Tasks:
 - [x] keep Markdown preview inside `verstak.markdown-editor`, with no separate
   provider competing for `.md` files;
 - [x] implement basic image metadata preview plugin;
-- implement search provider/index contract and official search plugin;
+- [x] implement baseline `verstak.search` workspace plugin and expose
+  `searchProviders` in contribution summaries;
+- implement persistent search index and cross-provider runtime hosting;
 - implement activity event log plugin;
 - implement journal/worklog plugin that can consume activity suggestions.
 

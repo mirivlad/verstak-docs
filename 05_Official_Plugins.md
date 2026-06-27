@@ -217,9 +217,10 @@ search.provider
 
 Назначение:
 
-- общий поиск по vault;
-- индекс notes/files/activity/worklog;
-- providers from plugins;
+- workspace-scoped search UI;
+- baseline recursive text search through public Files API;
+- search provider contribution for platform discovery;
+- index notes/files/activity/worklog later;
 - typo/layout tolerant search later.
 
 Provides:
@@ -229,6 +230,11 @@ search
 search.provider
 search.indexer
 ```
+
+Текущий статус: базовый `verstak.search` implemented as a workspace item and
+`searchProviders` contribution. It searches text-like vault files through
+`api.files.list` / `api.files.readText` and opens results through Workbench.
+Persistent indexing and cross-provider runtime hosting are still future work.
 
 ## 10. `official.secrets`
 

@@ -168,8 +168,10 @@ activity stream; the global sidebar view aggregates activity from all workspace
 streams plus unscoped global activity. It contributes `activityProviders`; the
 desktop runtime hosts those providers and records subscribed public events into
 the plugin storage even when the Activity view is not mounted. The Activity UI
-is a read/clear surface, not a manual recording toggle. Reconstruction and
-worklog suggestions are still future work.
+is a read/clear surface, not a manual recording toggle. It now reconstructs
+compact worklog suggestions from scoped activity streams and exposes them
+through the command-backed `verstak.activity.suggestWorklog` runtime contract
+for the future Journal plugin.
 
 ## Sync Conflict UX Contract
 

@@ -45,8 +45,8 @@ Implemented:
 
 Known remaining gaps:
 
-- `fileActions`, `noteActions`, and `contextMenuEntries` have registry support
-  but incomplete UI/runtime hosting.
+- `fileActions`, `noteActions`, and `contextMenuEntries` are exposed through the
+  desktop contribution summary and hosted by the official Files/Notes surfaces.
 - Sidecar host is not implemented.
 - Files/Notes are usable but not complete: restore, binary streaming, watcher,
   richer conflict UX, and Notes trash/delete UX are still incomplete.
@@ -70,8 +70,8 @@ Tasks:
 
 - [x] implement Command Palette UI for `commands` contributions;
 - [x] host `statusBarItems`;
-- define and host generic `contextMenuEntries`;
-- host `fileActions` and `noteActions` through Files/Notes surfaces;
+- [x] define and host generic `contextMenuEntries`;
+- [x] host `fileActions` and `noteActions` through Files/Notes surfaces;
 - add lifecycle events for workspace creation, rename, trash, selection;
 - replace deprecated workspace compatibility wrappers in frontend code where
   practical;
@@ -79,7 +79,8 @@ Tasks:
 
 Verification:
 
-- focused e2e tests for command palette, status bar, and contribution lifecycle;
+- focused e2e/smoke tests for command palette, status bar, action surfaces, and
+  contribution lifecycle;
 - `go test ./...`, frontend build/e2e, official plugin checks, SDK tests.
 
 ### Phase 2 - Files And Notes Product Surface

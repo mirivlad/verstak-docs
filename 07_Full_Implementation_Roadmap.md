@@ -96,7 +96,7 @@ Tasks:
 - [x] add Files restore metadata view;
 - [x] add Files restore command;
 - [x] define external open/show-in-folder as a public v2 API, replacing fallback;
-- add watcher-based refresh for Files/Notes after external changes;
+- [x] add watcher-based refresh for Files/Notes after external changes;
 - add safe binary read/streaming contract only after text workflows are stable.
 
 Verification:

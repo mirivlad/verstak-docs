@@ -90,7 +90,8 @@ storage as ordinary Markdown/files.
 
 Tasks:
 
-- improve Notes list filtering, sorting, rename/conflict UX, and empty states;
+- [x] improve Notes list filtering, sorting, and filtered empty states;
+- improve Notes rename/conflict UX;
 - [x] add Notes delete/trash through Files API with confirmation;
 - add Files restore metadata view and later restore command;
 - [x] define external open/show-in-folder as a public v2 API, replacing fallback;

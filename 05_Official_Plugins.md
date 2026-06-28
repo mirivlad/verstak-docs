@@ -171,6 +171,15 @@ the plugin storage even when the Activity view is not mounted. The Activity UI
 is a read/clear surface, not a manual recording toggle. Reconstruction and
 worklog suggestions are still future work.
 
+## Sync Conflict UX Contract
+
+`api.sync.now()` returns warning details through `conflicts` and `applyErrors`.
+The official Sync plugin must display both as warnings after manual sync. A
+conflict warning must include at least the affected entity type/path when the
+server provides those fields. The plugin must not auto-resolve conflicts, rename
+local files, overwrite local files, or hide conflict details behind a plain
+count.
+
 ## 6. `official.journal`
 
 Назначение:

@@ -110,7 +110,7 @@ Goal: make cross-device sync reliable enough for real vaults.
 
 Tasks:
 
-- define conflict UX contract for desktop and sync plugin;
+- [x] define conflict UX contract for desktop and sync plugin;
 - [x] add server/device revocation checks for sync auth paths;
 - [x] persist and display sync errors in Sync plugin;
 - [x] add retry/backoff for sync client operations;

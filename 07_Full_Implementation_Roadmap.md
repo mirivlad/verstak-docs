@@ -48,12 +48,12 @@ Known remaining gaps:
 - `fileActions`, `noteActions`, and `contextMenuEntries` are exposed through the
   desktop contribution summary and hosted by the official Files/Notes surfaces.
 - Sidecar host is not implemented.
-- Files/Notes are usable but not complete: restore, binary streaming, watcher,
-  richer conflict UX, and Notes trash/delete UX are still incomplete.
+- Files/Notes are usable but not complete: binary write/streaming, richer
+  conflict UX, and remaining Notes polish are still incomplete.
 - Activity, journal, browser inbox conversion workflow, indexed search,
   secrets, and templates plugins are not complete product features.
-- File/image preview exists as a basic provider, but image rendering still needs
-  binary streaming support for inline previews.
+- File/image preview exists as a basic provider with bounded inline image
+  rendering through the public Files API.
 - Browser extension repository has protocol, queue, and Chromium/Firefox build
   scaffold; desktop has a local receiver and mounted-view inbox plugin, but no
   pairing model, domain binding, or conversion workflow yet.
@@ -97,7 +97,7 @@ Tasks:
 - [x] add Files restore command;
 - [x] define external open/show-in-folder as a public v2 API, replacing fallback;
 - [x] add watcher-based refresh for Files/Notes after external changes;
-- add safe binary read/streaming contract only after text workflows are stable.
+- [x] add safe binary read/streaming contract only after text workflows are stable.
 
 Verification:
 

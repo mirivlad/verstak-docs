@@ -115,7 +115,8 @@ compete with the editor routing for `.md` / `.markdown` files.
 
 Назначение:
 
-- metadata view for image files until binary streaming exists;
+- inline preview for image files through bounded `api.files.readBytes`;
+- metadata view for previewed files;
 - `Open External` action through `api.files.openExternal`.
 
 Provides:
@@ -126,9 +127,9 @@ viewer.image
 preview.file
 ```
 
-Текущий статус: базовый `verstak.file-preview` implemented as a view-only
-provider for image metadata. Text-like files, code, and Markdown stay with
-editor plugins.
+Текущий статус: базовый `verstak.file-preview` renders image files inline via
+the public Files API and shows file metadata. Text-like files, code, and
+Markdown stay with editor plugins.
 
 ## 5. `official.activity`
 

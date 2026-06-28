@@ -113,7 +113,7 @@ Tasks:
 - define conflict UX contract for desktop and sync plugin;
 - [x] add server/device revocation checks for sync auth paths;
 - [x] persist and display sync errors in Sync plugin;
-- add retry/backoff for sync client operations;
+- [x] add retry/backoff for sync client operations;
 - [x] add real two-vault sync smoke scenarios for create/update/move/trash
   folders and files;
 - document deployment and backup procedures for `verstak-sync-server`.

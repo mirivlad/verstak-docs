@@ -116,7 +116,7 @@ Tasks:
 - [x] add retry/backoff for sync client operations;
 - [x] add real two-vault sync smoke scenarios for create/update/move/trash
   folders and files;
-- document deployment and backup procedures for `verstak-sync-server`.
+- [x] document deployment and backup procedures for `verstak-sync-server`.
 
 Verification:
 

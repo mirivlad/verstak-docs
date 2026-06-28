@@ -93,7 +93,8 @@ Tasks:
 - [x] improve Notes list filtering, sorting, and filtered empty states;
 - [x] improve Notes rename/conflict UX;
 - [x] add Notes delete/trash through Files API with confirmation;
-- add Files restore metadata view and later restore command;
+- [x] add Files restore metadata view;
+- add Files restore command later;
 - [x] define external open/show-in-folder as a public v2 API, replacing fallback;
 - add watcher-based refresh for Files/Notes after external changes;
 - add safe binary read/streaming contract only after text workflows are stable.

@@ -156,15 +156,19 @@ note.saved
 action.started
 browser.capture.received
 case.selected
+browser.capture.page
+browser.capture.selection
+browser.capture.link
 ```
 
 Текущий статус: базовый `verstak.activity` implemented as both a global sidebar
 view and a workspace item. Workspace tabs store and display only their own
 activity stream; the global sidebar view aggregates activity from all workspace
-streams plus unscoped global activity. It also contributes `activityProviders`,
-subscribes to file/note/browser/case activity events, and exposes a manual
-record/clear smoke path. Reconstruction and worklog suggestions are still
-future work.
+streams plus unscoped global activity. It contributes `activityProviders`; the
+desktop runtime hosts those providers and records subscribed public events into
+the plugin storage even when the Activity view is not mounted. The Activity UI
+is a read/clear surface, not a manual recording toggle. Reconstruction and
+worklog suggestions are still future work.
 
 ## 6. `official.journal`
 

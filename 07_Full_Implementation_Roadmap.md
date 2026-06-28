@@ -45,8 +45,8 @@ Implemented:
 
 Known remaining gaps:
 
-- `fileActions`, `noteActions`, `contextMenuEntries`, and `activityProviders`
-  have registry support but incomplete UI/runtime hosting.
+- `fileActions`, `noteActions`, and `contextMenuEntries` have registry support
+  but incomplete UI/runtime hosting.
 - Sidecar host is not implemented.
 - Files/Notes are usable but not complete: restore, binary streaming, watcher,
   richer conflict UX, and Notes trash/delete UX are still incomplete.

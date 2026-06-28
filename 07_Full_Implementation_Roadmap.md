@@ -162,7 +162,7 @@ Tasks:
   pending queues and a global aggregate view;
 - [x] implement browser extension capture scaffold for URL, selected text,
   page title, and link captures;
-- define local receiver permission/pairing model;
+- [x] define local receiver permission/pairing model;
 - add domain-to-workspace binding;
 - convert inbox entries into notes/links/files/activity events through public
   plugin APIs.

@@ -72,7 +72,7 @@ Tasks:
 - [x] host `statusBarItems`;
 - [x] define and host generic `contextMenuEntries`;
 - [x] host `fileActions` and `noteActions` through Files/Notes surfaces;
-- add lifecycle events for workspace creation, rename, trash, selection;
+- [x] add lifecycle events for workspace creation, rename, trash, selection;
 - replace deprecated workspace compatibility wrappers in frontend code where
   practical;
 - document each public API in SDK schemas and desktop runtime docs.

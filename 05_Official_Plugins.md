@@ -205,6 +205,14 @@ Optional requires:
 activity.reconstruction
 ```
 
+Текущий статус: базовый `verstak.journal` implemented as both a global sidebar
+view and a workspace item. Workspace views store manual worklog entries in the
+plugin settings namespace, import non-billable entries from
+`verstak.activity.suggestWorklog`, and deduplicate repeated imports by Activity
+suggestion id. The global view aggregates stored workspace worklogs. Billing
+reports, invoice export, timers, and richer report filters are still future
+work.
+
 ## 7. `official.browser-inbox`
 
 Назначение:

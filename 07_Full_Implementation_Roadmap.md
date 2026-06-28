@@ -141,7 +141,7 @@ Tasks:
   workspace-scoped storage, global aggregation, and public event subscriptions;
 - [x] expose `verstak.activity` and `verstak.browser-inbox` as global sidebar
   views while keeping their workspace items;
-- implement persistent search index and cross-provider runtime hosting;
+- [x] implement persistent search index and cross-provider runtime hosting;
 - implement activity reconstruction and worklog suggestions;
 - implement journal/worklog plugin that can consume activity suggestions.
 

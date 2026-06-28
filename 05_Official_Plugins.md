@@ -263,8 +263,11 @@ search.indexer
 `searchProviders` contribution. It searches as the user types, matches vault
 file/folder names and paths, scans text-like file contents through
 `api.files.list` / `api.files.readText`, and opens file results through
-Workbench. Persistent indexing and cross-provider runtime hosting are still
-future work.
+Workbench. It persists a workspace-scoped JSON search index in the plugin data
+namespace, refreshes it from public file events, registers its own vault-text
+provider as a command-backed `searchProviders` handler, and fans out to other
+registered provider commands at runtime. Full-text ranking, typo/layout
+tolerant search, and sidecar indexing remain later work.
 
 Target UX: search should be available from the workspace header next to the
 workspace title. The standalone Search workspace item may remain only as an

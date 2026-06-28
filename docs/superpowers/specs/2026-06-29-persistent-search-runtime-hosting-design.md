@@ -23,6 +23,14 @@ Current implementation status:
   `ReadPluginDataJSON` and `WritePluginDataJSON`, but the frontend plugin API
   currently exposes only `settings`.
 
+UX direction:
+
+- the primary search entry point belongs in the workspace header next to the
+  workspace title;
+- `verstak.search` remains the owner of indexing and provider hosting;
+- a standalone Search workspace item may stay as an expanded results surface,
+  but it is not the primary entry point.
+
 No visual companion is needed for this design because the decision is about
 runtime contracts and data flow, not layout.
 
@@ -82,8 +90,12 @@ Use the recommended approach.
 
 `verstak.search` becomes both:
 
-- the workspace search UI;
+- the workspace search runtime and expanded results UI;
 - the runtime host for all enabled `searchProviders`.
+
+The shell may render the compact input in the workspace header, but it should
+call into the Search plugin/runtime contract rather than implement search
+semantics in core.
 
 The desktop and SDK expose a generic frontend storage surface:
 

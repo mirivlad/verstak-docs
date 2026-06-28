@@ -266,6 +266,10 @@ file/folder names and paths, scans text-like file contents through
 Workbench. Persistent indexing and cross-provider runtime hosting are still
 future work.
 
+Target UX: search should be available from the workspace header next to the
+workspace title. The standalone Search workspace item may remain only as an
+expanded results surface; it should not be the primary search entry point.
+
 ## 10. `official.secrets`
 
 Назначение:

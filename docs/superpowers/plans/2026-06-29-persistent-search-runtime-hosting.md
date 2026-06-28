@@ -12,6 +12,9 @@
 
 - Do not copy code or architecture from `~/git/verstak`; it is feature reference only.
 - Search remains plugin functionality; do not move search semantics into desktop core.
+- The primary visible search input belongs in the workspace header next to the workspace title.
+- The standalone Search workspace item is at most an expanded results surface, not the primary entry point.
+- Workspace tool tabs are ordered by expected usage frequency, not alphabetically.
 - User files remain the source of truth; the index is an optimization and discovery layer.
 - Use JSON plugin data named `search-index`; do not use SQLite FTS or a sidecar indexer.
 - `searchProviders[].handler` is a command id declared by the same plugin.
@@ -41,6 +44,9 @@
 - Modify `frontend/src/lib/plugin-host/VerstakPluginAPI.js`
   - Expose `api.storage.data.read/write`.
   - Route to existing Wails methods `ReadPluginDataJSON` and `WritePluginDataJSON`.
+- Modify `frontend/src/lib/shell/WorkspaceHost.svelte`
+  - Sort workspace tools by expected user value instead of alphabetically.
+  - Reserve the workspace header as the primary compact search entry point.
 - Modify `frontend/tests/plugin-api-contributions-test.mjs`
   - Extend the smoke mock and assertions to cover plugin data round-trip.
 - Modify `frontend/src/lib/test/wails-mock.js`
@@ -359,6 +365,107 @@ git push
 ```
 
 Expected: commit is created and pushed; `git status --short --branch` reports `## main...origin/main`.
+
+---
+
+### Task 2A: Workspace Header Search Slot And Usage-Ordered Tabs
+
+**Files:**
+- Modify: `/home/mirivlad/git/verstak2/verstak-desktop/frontend/src/lib/shell/WorkspaceHost.svelte`
+- Test: add or extend a focused frontend smoke test under `/home/mirivlad/git/verstak2/verstak-desktop/frontend/tests/`
+
+**Interfaces:**
+- Consumes:
+  - Existing `contributions.workspaceItems`.
+  - Existing selected workspace props in `WorkspaceHost.svelte`.
+- Produces:
+  - Stable workspace tab ordering by expected usage frequency.
+  - A workspace header search slot next to the workspace title for the future compact Search entry.
+
+- [ ] **Step 1: Write failing frontend smoke coverage**
+
+Add a focused test that mounts or exercises `WorkspaceHost` ordering with sample
+tools named `Search`, `Activity`, `Files`, and `Notes`.
+
+Expected order:
+
+```text
+Notes
+Files
+Activity
+Browser Inbox
+Search
+```
+
+The test should also assert that the workspace header exposes a search input or
+search trigger container with a stable selector:
+
+```text
+data-workspace-search
+```
+
+- [ ] **Step 2: Run RED**
+
+Run the focused test command added in Step 1.
+
+Expected: it fails because workspace tools currently follow contribution order
+and there is no header search slot.
+
+- [ ] **Step 3: Implement ordering and header slot**
+
+In `WorkspaceHost.svelte`, add a small local ordering table:
+
+```js
+  const toolOrder = new Map([
+    ['notes', 10],
+    ['files', 20],
+    ['activity', 40],
+    ['browser', 50],
+    ['inbox', 50],
+    ['search', 90],
+  ]);
+```
+
+Sort `workspaceTools` after filtering enabled plugins by the best matching
+keyword in title/id/pluginId. Keep unknown tools after known tools and preserve
+their relative title order.
+
+Add a compact header search container next to the workspace title:
+
+```svelte
+<div class="workspace-search" data-workspace-search>
+  <input type="search" placeholder="Search workspace" aria-label="Search workspace" />
+</div>
+```
+
+This task only creates the visible slot and stable ordering; later Search task
+wires the input to the provider runtime.
+
+- [ ] **Step 4: Run GREEN and build**
+
+Run:
+
+```bash
+cd /home/mirivlad/git/verstak2/verstak-desktop/frontend
+npm run build
+```
+
+Expected: focused test and Vite build exit 0.
+
+- [ ] **Step 5: Commit and push desktop**
+
+Run:
+
+```bash
+cd /home/mirivlad/git/verstak2/verstak-desktop
+git status --short
+git add frontend/src/lib/shell/WorkspaceHost.svelte frontend/tests
+git commit -m "feat: add workspace header search slot"
+git push
+```
+
+Expected: commit is created and pushed; unrelated pre-existing changes are not
+included.
 
 ---
 

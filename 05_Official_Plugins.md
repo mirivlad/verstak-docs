@@ -253,8 +253,8 @@ global captures. The local receiver now has an opt-in paired mode that requires
 Inbox stores plugin-owned `domainBindings` and routes unscoped captures with an
 exact domain match into the bound workspace queue. Its first conversion workflow
 creates ordinary Markdown notes through the public Files API and publishes a
-`browser.capture.converted` event. Link/file/activity-specific conversions are
-still future work.
+`browser.capture.converted` event, which Activity records through its public
+provider subscription. Link/file-specific conversions are still future work.
 
 ## 9. `official.search`
 

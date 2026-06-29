@@ -188,7 +188,7 @@ notes or plain files.
 Tasks:
 
 - [x] define secret-store capability and permissions;
-- implement encrypted local secret storage;
+- [x] implement encrypted local secret storage;
 - add UI-only official secrets plugin;
 - integrate secret references with workspaces without exposing raw values to
   unrelated plugins.

@@ -320,8 +320,9 @@ secrets.write-ui
 Текущий статус: platform contract defines the draft `secret-store`,
 `secrets.read-ui`, and `secrets.write-ui` capabilities plus dangerous
 `secrets.read` / `secrets.write` permissions in the SDK manifest contract.
-Encrypted local storage and the official UI-only Secrets plugin are still
-future work.
+Desktop core now has a local AES-GCM secret store that keeps secret IDs and
+values out of plaintext files. The official UI-only Secrets plugin and
+workspace secret references are still future work.
 
 ## 11. `official.templates`
 

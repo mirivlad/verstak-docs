@@ -249,8 +249,10 @@ search.provider
 sidebar view and a workspace item. Workspace tabs keep their own pending queue;
 the global sidebar view aggregates queues from all workspaces plus unscoped
 global captures. The local receiver now has an opt-in paired mode that requires
-`X-Verstak-Receiver-Token` before publishing browser capture events. Domain
-binding and conversion into notes/links/files/activity are still future work.
+`X-Verstak-Receiver-Token` before publishing browser capture events. Browser
+Inbox stores plugin-owned `domainBindings` and routes unscoped captures with an
+exact domain match into the bound workspace queue. Conversion into
+notes/links/files/activity is still future work.
 
 ## 9. `official.search`
 

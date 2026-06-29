@@ -251,8 +251,10 @@ the global sidebar view aggregates queues from all workspaces plus unscoped
 global captures. The local receiver now has an opt-in paired mode that requires
 `X-Verstak-Receiver-Token` before publishing browser capture events. Browser
 Inbox stores plugin-owned `domainBindings` and routes unscoped captures with an
-exact domain match into the bound workspace queue. Conversion into
-notes/links/files/activity is still future work.
+exact domain match into the bound workspace queue. Its first conversion workflow
+creates ordinary Markdown notes through the public Files API and publishes a
+`browser.capture.converted` event. Link/file/activity-specific conversions are
+still future work.
 
 ## 9. `official.search`
 

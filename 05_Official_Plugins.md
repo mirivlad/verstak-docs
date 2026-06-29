@@ -317,6 +317,12 @@ secrets.write-ui
 - доступ к secret-store должен идти через permissions;
 - плагины не получают `secrets.read` автоматически.
 
+Текущий статус: platform contract defines the draft `secret-store`,
+`secrets.read-ui`, and `secrets.write-ui` capabilities plus dangerous
+`secrets.read` / `secrets.write` permissions in the SDK manifest contract.
+Encrypted local storage and the official UI-only Secrets plugin are still
+future work.
+
 ## 11. `official.templates`
 
 Назначение:

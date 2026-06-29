@@ -317,12 +317,15 @@ secrets.write-ui
 - доступ к secret-store должен идти через permissions;
 - плагины не получают `secrets.read` автоматически.
 
-Текущий статус: platform contract defines the draft `secret-store`,
-`secrets.read-ui`, and `secrets.write-ui` capabilities plus dangerous
-`secrets.read` / `secrets.write` permissions in the SDK manifest contract.
-Desktop core now has a local AES-GCM secret store that keeps secret IDs and
-values out of plaintext files. The official UI-only Secrets plugin and
-workspace secret references are still future work.
+Текущий статус: platform contract defines `secret-store`, `secrets.read-ui`,
+and `secrets.write-ui` capabilities plus dangerous `secrets.read` /
+`secrets.write` permissions in the SDK manifest contract. Desktop core has a
+local AES-GCM secret store unlocked once per app session by master password.
+The official `verstak.secrets` plugin shows global and workspace-scoped
+secrets grouped by workspace, copies markdown secret links, and handles
+`secret` workbench resources. The default editor renders
+`verstak-secret://...` markdown links only when a secrets open-provider is
+enabled, and opens the Secrets plugin without inserting raw values into notes.
 
 ## 11. `official.templates`
 

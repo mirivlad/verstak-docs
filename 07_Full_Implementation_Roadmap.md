@@ -57,8 +57,8 @@ Known remaining gaps:
 - Browser extension repository has protocol, queue, and Chromium/Firefox build
   scaffold; desktop has a local receiver and mounted-view inbox plugin; receiver
   pairing, basic Browser Inbox domain binding, create-note conversion, and
-  Activity recording for conversions are implemented, but link/file-specific
-  conversion workflows remain.
+  create-link conversion are implemented, and Activity records conversions.
+  File attachment capture/conversion remains future work.
 - Packaging/update/release workflow is not product-grade yet.
 
 ## 4. Implementation Phases
@@ -168,7 +168,8 @@ Tasks:
 - [x] add domain-to-workspace binding;
 - [x] convert inbox entries into notes through public plugin APIs;
 - [x] record converted inbox entries in Activity through public plugin events;
-- convert inbox entries into links/files through public
+- [x] convert inbox entries into link files through public plugin APIs;
+- convert captured file attachments through public
   plugin APIs.
 
 Verification:
@@ -239,7 +240,7 @@ Verification:
 4. [x] Notes trash/delete UX in `verstak-official-plugins`.
 5. [x] Sync hardening pass with expanded real two-vault smoke.
 6. [~] Browser inbox protocol design, extension scaffold, local receiver, and
-   minimal inbox plugin are implemented; link/file conversions remain.
+   minimal inbox plugin are implemented; file attachment conversion remains.
 
 This order finishes generic platform surfaces before building product features
 that depend on them.

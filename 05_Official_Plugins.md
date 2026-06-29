@@ -254,7 +254,9 @@ Inbox stores plugin-owned `domainBindings` and routes unscoped captures with an
 exact domain match into the bound workspace queue. Its first conversion workflow
 creates ordinary Markdown notes through the public Files API and publishes a
 `browser.capture.converted` event, which Activity records through its public
-provider subscription. Link/file-specific conversions are still future work.
+provider subscription. Browser Inbox also creates human-readable `.url` link
+files through the public Files API. File attachment capture/conversion is still
+future work.
 
 ## 9. `official.search`
 

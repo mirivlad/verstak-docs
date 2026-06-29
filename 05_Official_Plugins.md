@@ -322,8 +322,10 @@ and `secrets.write-ui` capabilities plus dangerous `secrets.read` /
 `secrets.write` permissions in the SDK manifest contract. Desktop core has a
 local AES-GCM secret store unlocked once per app session by master password.
 The official `verstak.secrets` plugin shows global and workspace-scoped
-secrets grouped by workspace, copies markdown secret links, and handles
-`secret` workbench resources. The default editor renders
+secrets grouped by workspace, separates first-run master-password setup from
+later unlock, supports editing and deleting secrets, shows selected secret
+fields as a table, copies markdown secret links, and handles `secret`
+workbench resources. The default editor renders
 `verstak-secret://...` markdown links only when a secrets open-provider is
 enabled, and opens the Secrets plugin without inserting raw values into notes.
 

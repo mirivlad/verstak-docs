@@ -48,8 +48,8 @@ Known remaining gaps:
 - `fileActions`, `noteActions`, and `contextMenuEntries` are exposed through the
   desktop contribution summary and hosted by the official Files/Notes surfaces.
 - Sidecar host is not implemented.
-- Files/Notes are usable but not complete: binary write/streaming, richer
-  conflict UX, and remaining Notes polish are still incomplete.
+- Files/Notes are usable but not complete: chunked streaming/large-file import,
+  richer conflict UX, and remaining Notes polish are still incomplete.
 - Activity, journal, browser inbox conversion workflow, indexed search,
   secrets, and templates plugins are not complete product features.
 - File/image preview exists as a basic provider with bounded inline image
@@ -58,8 +58,9 @@ Known remaining gaps:
   scaffold; desktop has a local receiver and mounted-view inbox plugin; receiver
   pairing, basic Browser Inbox domain binding, create-note conversion, and
   create-link conversion are implemented, text file attachment conversion is
-  implemented, and Activity records conversions. Binary attachment
-  capture/conversion remains future work.
+  implemented, bounded binary attachment conversion is implemented, and Activity
+  records conversions. Chunked large-file attachment capture remains future
+  work.
 - Packaging/update/release workflow is not product-grade yet.
 
 ## 4. Implementation Phases
@@ -171,8 +172,7 @@ Tasks:
 - [x] record converted inbox entries in Activity through public plugin events;
 - [x] convert inbox entries into link files through public plugin APIs;
 - [x] convert captured text file attachments through public plugin APIs;
-- convert captured binary attachments through public
-  plugin APIs.
+- [x] convert captured bounded binary attachments through public plugin APIs.
 
 Verification:
 
@@ -241,8 +241,9 @@ Verification:
 3. [x] External open public v2 API to replace Files fallback.
 4. [x] Notes trash/delete UX in `verstak-official-plugins`.
 5. [x] Sync hardening pass with expanded real two-vault smoke.
-6. [~] Browser inbox protocol design, extension scaffold, local receiver, and
-   minimal inbox plugin are implemented; binary attachment conversion remains.
+6. [x] Browser inbox protocol design, extension scaffold, local receiver,
+   minimal inbox plugin, and note/link/text-file/binary-file conversions are
+   implemented.
 
 This order finishes generic platform surfaces before building product features
 that depend on them.

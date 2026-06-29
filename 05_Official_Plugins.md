@@ -257,9 +257,10 @@ exact domain match into the bound workspace queue. Its first conversion workflow
 creates ordinary Markdown notes through the public Files API and publishes a
 `browser.capture.converted` event, which Activity records through its public
 provider subscription. Browser Inbox also creates human-readable `.url` link
-files through the public Files API. It now accepts selected text files from the
-browser extension and creates ordinary workspace files through the public Files
-API. Binary attachment capture/conversion remains future work.
+files through the public Files API. It now accepts selected files from the
+browser extension and creates ordinary workspace files through `api.files.writeText`
+or bounded `api.files.writeBytes`. Chunked large-file attachment capture remains
+future work.
 
 ## 9. `official.search`
 

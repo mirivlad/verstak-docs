@@ -480,7 +480,9 @@ Verification:
 
 ## Next Review Steps
 
-1. Design and implement the user-level Home/Today surface.
+1. Design and implement the next Today follow-up: make captures, Activity
+   worklog suggestions, and Journal import/review actionable from the first
+   workspace screen.
 2. Re-run:
    - `GOFLAGS=-tags=webkit2_41 ./scripts/check.sh`
    - `npm --prefix frontend run test:e2e`

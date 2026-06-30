@@ -50,8 +50,12 @@ Known remaining gaps:
 - Sidecar host is not implemented.
 - Files/Notes are usable but not complete: chunked streaming/large-file import,
   richer conflict UX, and remaining Notes polish are still incomplete.
-- Activity, journal, browser inbox conversion workflow, indexed search,
-  secrets, and templates plugins are not complete product features.
+- Activity, Journal, Browser Inbox conversion workflows, indexed Search, and
+  Secrets now have baseline plugin implementations and public API contracts.
+  Their remaining work is product UX depth: richer Today aggregation,
+  actionable Activity to Journal review flows, capture/pairing discoverability,
+  production-grade reporting, and final polish.
+- Templates plugin is not implemented yet.
 - File/image preview exists as a basic provider with bounded inline image
   rendering through the public Files API.
 - Browser extension repository has protocol, queue, and Chromium/Firefox build
@@ -154,6 +158,11 @@ Verification:
 - provider selection tests;
 - plugin lifecycle tests proving optional dependencies degrade cleanly.
 
+Status: baseline platform/product contracts are implemented. Remaining work is
+tracked as UX follow-up rather than missing runtime foundation: Today should
+make Activity suggestions and Journal imports actionable from the first
+workspace screen, and Journal still needs reporting/timer/export depth.
+
 ### Phase 5 - Browser Inbox
 
 Goal: capture browser context into the local vault through a public local
@@ -179,6 +188,11 @@ Verification:
 - extension build checks;
 - local receiver API tests;
 - inbox plugin smoke/e2e tests.
+
+Status: baseline capture, routing, conversion, and Activity recording workflows
+are implemented. Remaining work is UX follow-up: make extension pairing,
+capture-from-clipboard/manual capture, domain binding state, and conversion
+outcomes obvious in the visible app flow.
 
 ### Phase 6 - Secrets
 
@@ -244,6 +258,11 @@ Verification:
 6. [x] Browser inbox protocol design, extension scaffold, local receiver,
    minimal inbox plugin, and note/link/text-file/binary-file conversions are
    implemented.
+7. [ ] Product UX follow-up in `verstak-desktop`: make the shell-level Today
+   flow the command center for captures, recent activity, Activity worklog
+   suggestions, and Journal import/review. This should reuse existing official
+   plugin contracts instead of moving Activity, Browser Inbox, or Journal into
+   desktop core.
 
 This order finishes generic platform surfaces before building product features
 that depend on them.

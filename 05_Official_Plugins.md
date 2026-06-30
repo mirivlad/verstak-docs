@@ -173,7 +173,7 @@ the plugin storage even when the Activity view is not mounted. The Activity UI
 is a read/clear surface, not a manual recording toggle. It now reconstructs
 compact worklog suggestions from scoped activity streams and exposes them
 through the command-backed `verstak.activity.suggestWorklog` runtime contract
-for the future Journal plugin.
+for the Journal plugin.
 
 ## Sync Conflict UX Contract
 

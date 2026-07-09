@@ -53,14 +53,15 @@ Known remaining gaps:
 - Activity, Journal, Browser Inbox conversion workflows, indexed Search, and
   Secrets now have baseline plugin implementations and public API contracts.
   Their remaining work is product UX depth: richer Today aggregation,
-  actionable Activity to Journal review flows, capture/pairing discoverability,
-  production-grade reporting, and final polish.
+  actionable Activity to Journal review flows, capture-from-clipboard/manual
+  capture, production-grade reporting, and final polish.
 - Templates plugin is not implemented yet.
 - File/image preview exists as a basic provider with bounded inline image
   rendering through the public Files API.
 - Browser extension repository has protocol, queue, and Chromium/Firefox build
-  scaffold; desktop has a local receiver and mounted-view inbox plugin; receiver
-  pairing, basic Browser Inbox domain binding, create-note conversion, and
+  scaffold; desktop has a bounded, token-paired local receiver and mounted-view
+  inbox plugin; receiver pairing settings, basic Browser Inbox domain binding,
+  create-note conversion, and
   create-link conversion are implemented, text file attachment conversion is
   implemented, bounded binary attachment conversion is implemented, and Activity
   records conversions. Chunked large-file attachment capture remains future
@@ -176,6 +177,9 @@ Tasks:
 - [x] implement browser extension capture scaffold for URL, selected text,
   page title, and link captures;
 - [x] define local receiver permission/pairing model;
+- [x] require an installation-local pairing token and expose its rotation through
+  Browser Inbox settings;
+- [x] bound browser receiver payloads and file content before publishing events;
 - [x] add domain-to-workspace binding;
 - [x] convert inbox entries into notes through public plugin APIs;
 - [x] record converted inbox entries in Activity through public plugin events;
@@ -189,10 +193,10 @@ Verification:
 - local receiver API tests;
 - inbox plugin smoke/e2e tests.
 
-Status: baseline capture, routing, conversion, and Activity recording workflows
-are implemented. Remaining work is UX follow-up: make extension pairing,
+Status: baseline capture, pairing, routing, conversion, and Activity recording
+workflows are implemented. Remaining work is UX follow-up:
 capture-from-clipboard/manual capture, domain binding state, and conversion
-outcomes obvious in the visible app flow.
+outcomes in the visible app flow.
 
 ### Phase 6 - Secrets
 

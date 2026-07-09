@@ -2,31 +2,31 @@
 
 ## Purpose
 
-The browser extension already sends captures to the desktop local receiver and
-can include `X-Verstak-Receiver-Token`. The desktop receiver currently accepts
-captures without a pairing model. This slice defines and implements the local
-receiver token gate without moving Browser Inbox behavior into desktop core.
+The browser extension sends captures to the desktop local receiver with
+`X-Verstak-Receiver-Token`. The desktop runtime starts that receiver only in
+paired mode, without moving Browser Inbox queues or conversion behavior into
+desktop core.
 
 ## Scope
 
 This slice covers only the local receiver permission/pairing model:
 
-- receiver token validation;
-- clear HTTP responses for paired/unpaired requests;
-- documentation of how the extension presents the token.
+- generation and local persistence of a receiver token;
+- receiver token validation and rotation without a server restart;
+- bounded capture payload validation before an event is published;
+- Browser Inbox and extension settings for transferring the token.
 
-It does not implement domain-to-workspace binding, inbox conversion to
-notes/files/activity, browser UI for pairing QR codes, or encrypted token
-storage. Those remain later Phase 5 work.
+It does not implement browser UI for pairing QR codes or encrypted keyring
+storage. The current token is kept in the installation-local app settings file,
+which the manager writes with mode `0600`.
 
 ## Model
 
-The receiver has two modes:
-
-- **Open legacy mode:** no receiver token is configured. This preserves current
-  development behavior and accepts captures without the token header.
-- **Paired mode:** a receiver token is configured and enabled. Every capture
-  request must include:
+The production receiver always starts in paired mode. On startup it generates a
+32-byte random token when none exists, stores it outside the vault in
+`~/.config/verstak/config.json`, and does not log it. If that token cannot be
+persisted, the local receiver is disabled rather than opened without a token.
+Every capture request must include:
 
 ```text
 X-Verstak-Receiver-Token: <token>
@@ -34,7 +34,8 @@ X-Verstak-Receiver-Token: <token>
 
 The receiver compares the supplied token to the configured token using a
 constant-time comparison. It does not publish browser capture events when the
-token is missing or wrong.
+token is missing or wrong. The package keeps the open constructor for embedded
+legacy callers, but `main.go` does not use it.
 
 ## HTTP Contract
 
@@ -76,7 +77,8 @@ Wrong token in paired mode:
 
 Other validation behavior remains unchanged: invalid payloads return `400`,
 missing Browser Inbox consumers return `503`, and non-POST methods return
-`405`.
+`405`. Payloads over 12 MiB return `413`; capture text, file metadata, encoded
+binary data, and decoded file content are capped before publication.
 
 ## Runtime API
 
@@ -93,6 +95,12 @@ func NewWithOptions(bus *events.Bus, options Options, providers ...WorkspaceProv
 
 `New(bus, providers...)` remains the open legacy constructor.
 
+The Wails bridge exposes `PluginBrowserReceiverPairing` and
+`PluginRotateBrowserReceiverToken` only to plugins declaring the dangerous
+`browser.receiver.manage` permission. `verstak.browser-inbox` presents the
+receiver URL, token copy action, and rotation control; the browser extension
+stores the values in its local settings.
+
 ## Testing
 
 `internal/core/browserreceiver/receiver_test.go` must prove:
@@ -100,4 +108,6 @@ func NewWithOptions(bus *events.Bus, options Options, providers ...WorkspaceProv
 - paired receivers reject missing tokens with `401`;
 - paired receivers reject wrong tokens with `401`;
 - paired receivers accept correct tokens and publish the capture event;
-- open legacy receivers still accept captures without a token.
+- a token persists across settings reload and changes immediately on rotation;
+- oversized or malformed capture payloads do not publish an event;
+- Browser Inbox and extension smoke tests cover the settings transfer path.

@@ -4,14 +4,22 @@
 
 **Goal:** Add a token-based pairing gate to the local browser capture receiver.
 
-**Architecture:** Keep Browser Inbox as a plugin. Add a transport-level token option to `internal/core/browserreceiver`, preserve the open constructor for current development behavior, and document the extension header contract.
+**Architecture:** Keep Browser Inbox as a plugin. The desktop runtime generates
+and requires an installation-local receiver token, while the plugin and browser
+extension expose the settings transfer and rotation flow.
 
 **Tech Stack:** Go desktop core package tests, browser extension protocol docs, Markdown docs.
+
+## Completion Status (2026-07-10)
+
+Completed. The implementation also added bounded ingress validation, token
+persistence and rotation, the `browser.receiver.manage` SDK permission, a
+Browser Inbox settings panel, and extension popup token persistence.
 
 ## Global Constraints
 
 - Do not move Browser Inbox queues or conversion workflows into desktop core.
-- Preserve existing receiver behavior when no token is configured.
+- Production startup must fail closed when a token cannot be persisted.
 - Paired mode must not publish capture events for missing or wrong tokens.
 - Use TDD: write the failing Go receiver test first, run it red, then implement.
 - Commit and push each affected repository after meaningful changes.
@@ -27,11 +35,11 @@
 **Interfaces:**
 - Produces documented `X-Verstak-Receiver-Token` pairing contract.
 
-- [ ] **Step 1: Write spec and plan**
+- [x] **Step 1: Write spec and plan**
 
 Write the design and this implementation plan.
 
-- [ ] **Step 2: Verify docs**
+- [x] **Step 2: Verify docs**
 
 Run:
 
@@ -42,7 +50,7 @@ git diff --check
 
 Expected: exits 0.
 
-- [ ] **Step 3: Commit and push docs**
+- [x] **Step 3: Commit and push docs**
 
 Run:
 
@@ -66,11 +74,11 @@ Expected: docs `main` is clean and pushed.
   - `type Options struct { RequireToken bool; ReceiverToken string }`
   - `func NewWithOptions(bus *events.Bus, options Options, providers ...WorkspaceProvider) *Receiver`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Add tests proving missing/wrong token rejection and correct token acceptance.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run:
 
@@ -81,12 +89,12 @@ go test ./internal/core/browserreceiver
 
 Expected: fails because `Options` / `NewWithOptions` do not exist.
 
-- [ ] **Step 3: Implement token gate**
+- [x] **Step 3: Implement token gate**
 
 Add `Options`, `NewWithOptions`, header validation, and constant-time token
 comparison. Keep `New` behavior unchanged.
 
-- [ ] **Step 4: Run GREEN**
+- [x] **Step 4: Run GREEN**
 
 Run:
 
@@ -98,7 +106,7 @@ go test ./internal/core/...
 
 Expected: both commands exit 0.
 
-- [ ] **Step 5: Commit and push desktop**
+- [x] **Step 5: Commit and push desktop**
 
 Run:
 
@@ -123,7 +131,7 @@ remains unstaged.
 - Consumes verified receiver token gate.
 - Produces docs matching implemented pairing behavior.
 
-- [ ] **Step 1: Update extension README**
+- [x] **Step 1: Update extension README**
 
 Change the receiver token header description from optional future work to:
 
@@ -131,7 +139,7 @@ Change the receiver token header description from optional future work to:
 - `X-Verstak-Receiver-Token: <token>` required when the desktop receiver is in paired mode
 ```
 
-- [ ] **Step 2: Verify and commit extension docs**
+- [x] **Step 2: Verify and commit extension docs**
 
 Run:
 
@@ -145,7 +153,7 @@ git push
 
 Expected: extension `main` is clean and pushed.
 
-- [ ] **Step 3: Update platform docs**
+- [x] **Step 3: Update platform docs**
 
 In `05_Official_Plugins.md`, describe that Browser Inbox receives captures
 through the local receiver token pairing model. In
@@ -155,7 +163,7 @@ through the local receiver token pairing model. In
 - [x] define local receiver permission/pairing model;
 ```
 
-- [ ] **Step 4: Verify and commit docs**
+- [x] **Step 4: Verify and commit docs**
 
 Run:
 

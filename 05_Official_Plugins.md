@@ -250,9 +250,12 @@ search.provider
 Текущий статус: базовый `verstak.browser-inbox` implemented as both a global
 sidebar view and a workspace item. Workspace tabs keep their own pending queue;
 the global sidebar view aggregates queues from all workspaces plus unscoped
-global captures. The local receiver now has an opt-in paired mode that requires
-`X-Verstak-Receiver-Token` before publishing browser capture events. Browser
-Inbox stores plugin-owned `domainBindings` and routes unscoped captures with an
+global captures. The local receiver starts in paired mode: it generates an
+installation-local token and requires `X-Verstak-Receiver-Token` before
+publishing browser capture events. The Browser Inbox settings panel exposes the
+receiver URL and token, and rotates the token through the dangerous
+`browser.receiver.manage` permission. Browser Inbox stores plugin-owned
+`domainBindings` and routes unscoped captures with an
 exact domain match into the bound workspace queue. Its first conversion workflow
 creates ordinary Markdown notes through the public Files API and publishes a
 `browser.capture.converted` event, which Activity records through its public

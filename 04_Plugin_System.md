@@ -46,6 +46,13 @@ official.notes/
   "apiVersion": "1",
   "description": "Markdown notes inside Verstak cases.",
   "source": "official",
+  "localization": {
+    "defaultLocale": "en",
+    "locales": {
+      "en": "locales/en.json",
+      "ru": "locales/ru.json"
+    }
+  },
   "provides": [
     "workspace.notes",
     "entity.note"
@@ -84,6 +91,35 @@ official.notes/
   }
 }
 ```
+
+### 3.1. Локализация
+
+Локализуемый плагин объявляет собственные JSON-каталоги в `localization`.
+Пути должны быть относительными, использовать `/` и оставаться внутри каталога
+плагина. Все значения каталога — строки. Литеральные английские значения в
+manifest остаются fallback, а переводы metadata используют стабильные ключи:
+
+```text
+manifest.name
+manifest.description
+contributions.views.<id>.title
+contributions.commands.<id>.title
+contributions.statusBarItems.<id>.label
+```
+
+Внутренний UI плагина получает текущий язык только через публичный API:
+
+```js
+const locale = api.i18n.getLocale();
+const title = api.i18n.t('ui.title', undefined, 'Notes');
+const unsubscribe = api.i18n.onDidChangeLocale(nextLocale => {
+  // Обновить текст без перемонтирования компонента и потери состояния.
+});
+```
+
+Desktop поддерживает `system`, `en` и `ru`. В режиме `system` локали `ru-*`
+выбирают русский язык, остальные — английский. Плагин отвечает за свои
+переводы; desktop core не содержит тексты официальных плагинов.
 
 ## 4. Capabilities Instead Of Plugin Names
 
@@ -306,4 +342,3 @@ official.notes-0.1.0.vpkg
 - checksums/signature later.
 
 На первом этапе допустима ручная установка папкой в plugin directory.
-

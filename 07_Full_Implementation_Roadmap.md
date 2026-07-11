@@ -41,6 +41,9 @@ Implemented:
 - browser inbox local receiver and minimal official Browser Inbox plugin;
 - sync server with device/user auth and operation push/pull;
 - SDK manifest/types/schema coverage for current plugin APIs;
+- persisted System/English/Russian application language selection, localized
+  desktop shell, public `api.i18n` plugin contract, and bilingual catalogs for
+  all official plugins;
 - automated Go, frontend, official plugin, SDK, and real-sync smoke checks.
 
 Known remaining gaps:
@@ -67,6 +70,8 @@ Known remaining gaps:
   records conversions. Chunked large-file attachment capture remains future
   work.
 - Packaging/update/release workflow is not product-grade yet.
+- Browser extension UI localization is not yet migrated to the shared
+  multilingual product policy.
 
 ## 4. Implementation Phases
 

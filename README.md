@@ -2,6 +2,10 @@
 
 Сводные архитектурные артефакты платформы Верстак.
 
+> Первый публичный выпуск — alpha. Инструкции для сборки и упаковки каждого
+> исполняемого компонента находятся в его README: Desktop, official plugins,
+> browser extension и SDK должны собираться из одной release-линейки.
+
 ## Содержание
 
 - [Product Vision](01_Product_Vision.md) — что остаётся неизменным
@@ -33,3 +37,8 @@
 | `verstak-sync-server` | Сервер синхронизации |
 | `verstak-browser-extension` | Расширение браузера |
 | `verstak-docs` | Документация |
+
+## Лицензия
+
+Copyright © 2026 Verstak contributors. Документация распространяется на
+условиях [GNU AGPLv3 или новее](LICENSE).

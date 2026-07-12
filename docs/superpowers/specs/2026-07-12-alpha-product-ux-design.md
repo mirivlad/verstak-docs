@@ -12,6 +12,38 @@ The user-visible Russian term is **Дело**. Existing platform and storage nam
 such as `workspaceRootPath` remain internal compatibility details in this
 tranche.
 
+## Durable identity of a Дело
+
+Every managed Дело has an immutable UUID v4 `workspaceId`. It is the identity for
+relations; `workspaceRootPath` is only the current or historical filesystem
+address and presentation label. Inbox assignments, domain bindings, Activity
+events/sessions/candidates, Journal source references, and Overview state store
+`workspaceId` as their primary relation key and retain a path only as a cached
+display value.
+
+The UUID lives in a small immutable marker inside the case folder,
+`<Дело>/.verstak/workspace.json`, and is also indexed in Desktop metadata. The
+inside-folder marker survives a Desktop rename, Trash move, restore, and an
+external filesystem rename. It prevents a newly created folder with the same
+path from inheriting old links.
+
+On first alpha startup, each writable legacy or externally created top-level
+case without a marker receives a new UUID and its path-keyed relation data is
+migrated to that UUID. If a folder is not writable, it remains viewable but
+cannot be selected as a durable relation target until its marker can be
+created. If two active folders contain the same UUID (for example after a
+filesystem copy), Desktop shows an identity-repair action and does not
+automatically attach Inbox, binding, or Activity data to either duplicate.
+The repair UI asks which folder retains the existing identity; it generates a
+new marker UUID for the other folder and leaves old relations with the retained
+identity. It never silently merges the two folders' histories.
+
+Workspace lifecycle events carry both `workspaceId` and current path. A rename
+updates only the path cache. Trash and restore retain the same ID and use the
+trash ID only to match the particular trash operation. When a folder is removed
+outside Desktop, its relations retain the UUID and become unavailable; a new
+folder at the old path has a newly generated UUID and cannot take them over.
+
 This document supersedes conflicting decisions in the following older narrow
 designs:
 
@@ -171,9 +203,11 @@ The existing local pairing token gates the endpoint; the token is never placed
 in Activity storage or UI.
 
 The receiver annotates a valid activity with an existing exact hostname-to-Дело
-binding when one exists. Bindings remain explicit: `client.example.com` does
-not imply `example.com` or the reverse. This is deliberately different from
-the exclusion-list suffix rule. Unbound activity is stored as global activity.
+binding when one exists. A binding stores `workspaceId` as identity and the
+current root path as display cache. Bindings remain explicit:
+`client.example.com` does not imply `example.com` or the reverse. This is
+deliberately different from the exclusion-list suffix rule. Unbound activity is
+stored with the explicit `unassigned` session scope.
 
 ## Activity and Journal
 
@@ -201,9 +235,18 @@ Activity presents chronological sessions rather than a raw log by default. A
 browser activity session displays, for example, `admin.client-site.ru · 1 ч
 32 мин`; it exposes no hidden URL/title data.
 
-A logical session is scoped to one existing Дело and is split only by a
-different Дело, a 20-minute idle gap, or 120 minutes of total session span. It
-is not split merely because midnight passes. A session is ready when either:
+A logical session has one explicit scope:
+
+```text
+{ kind: "workspace", workspaceId, workspaceRootPath } | { kind: "unassigned" }
+```
+
+An unassigned session is a normal temporal scope, not an exception. It is shown
+in Activity and may open Journal review, where the user must choose an existing
+active Дело. That one-time choice does not create a binding. A workspace session
+is split only by a different workspace ID, a transition to/from unassigned, a
+20-minute idle gap, or 120 minutes of total session span. It is not split
+merely because midnight passes. A session is ready when either:
 
 - meaningful events in its session cover at least ten minutes and include at
   least two events; or
@@ -212,10 +255,33 @@ is not split merely because midnight passes. A session is ready when either:
 `workspace.selected`, `file.opened`, and `note.opened` are diagnostic context,
 not meaningful work by themselves.
 
-Each logical session receives a stable `sessionId` derived from its case and
-first ordered event; the service stores that ID on each appended event and
-preserves the session-start metadata through log compaction. It persists an
-ordered handled watermark
+Duration is normative rather than the wall-clock span from first to last event.
+Sort meaningful events by `{occurredAt, activityId}` within a session:
+
+- A browser-domain record contributes its explicit validated
+  `durationSeconds`.
+- A file/note event has no inherent duration. For each adjacent pair of
+  zero-duration meaningful events, add `min(time difference, 10 minutes)` only
+  when no explicit-duration browser record lies between that pair in the
+  ordered session.
+- A gap over 20 minutes has already split the session, so it contributes no
+  implicit duration. The first and final standalone point event each contribute
+  zero seconds.
+- Candidate duration is the sum of explicit browser duration and these implicit
+  point-event intervals, capped at the 120-minute session maximum. It is never
+  inferred from the overall first-to-last span.
+
+Thus a note saved at 10:00 and a file changed at 10:09 estimate nine minutes;
+the same events at 10:00 and 10:50 form separate zero-duration sessions rather
+than a fictional 50-minute block.
+
+Each logical session receives a newly generated immutable UUID `sessionId` at
+creation and stores an immutable anchor `{scope, firstSeenAt, firstActivityId}`.
+The service stores that ID on each appended event and preserves the anchor
+through log compaction. A late event may join a same-scope session only when it
+falls within that session's 20-minute boundary; otherwise it starts a new
+session. It never recomputes an existing session ID or anchor. Each session
+persists an ordered handled watermark
 `{ occurredAt, activityId }` and optional state for the latest reviewed slice.
 A candidate contains only source events after that watermark:
 
@@ -272,14 +338,17 @@ A capture remains one canonical record with independent fields:
 
 ```text
 globalState: active | archived
-workspaceRef: active | trashed | unavailable | orphaned
-workspaceRootPath: optional active or historical Дело path
+workspaceId: optional immutable UUID of assigned Дело
+workspaceState: unassigned | active | trashed | unavailable | orphaned
+workspaceRootPath: optional current or historical Дело path cache
 workspaceTrashId: optional stable trash identity
 ```
 
-Existing records migrate to `globalState: active`; their current assignment is
-retained. The current test vault may be discarded, but the migration is
-non-destructive for an alpha user vault.
+Existing records migrate to `globalState: active`. An assignment whose current
+path resolves to an active marker receives that marker's `workspaceId`; an
+unresolved legacy path becomes `unavailable` rather than attaching to a future
+folder of the same name. The current test vault may be discarded, but the
+migration is non-destructive for an alpha user vault.
 
 ### Actions
 
@@ -288,8 +357,8 @@ non-destructive for an alpha user vault.
 - **Убрать из общих входящих** changes `globalState` to `archived`. It never
   removes the assignment, so an assigned capture remains available from its
   Дело.
-- **Открепить от дела** removes only the `workspaceRef` and
-  `workspaceRootPath`. If the capture is
+- **Открепить от дела** clears `workspaceId`, `workspaceRootPath`, and
+  `workspaceTrashId`, and sets `workspaceState` to `unassigned`. If the capture is
   still globally active it returns to the global Inbox; otherwise it remains in
   archive.
 - **Удалить везде** removes the canonical capture and its assignment. It is a
@@ -305,27 +374,29 @@ non-destructive for an alpha user vault.
   overwrites silently: the dialog offers an explicit `name (2).url` alternative
   or cancellation. Read-only/error cases leave the capture unchanged and show
   the failure. Success publishes the normal safe file/link Activity event; the
-  written file opens through the existing user-initiated OS-default-browser
-  file action.
+  link is opened through the dedicated URL-opening behaviour below, not by
+  relying on a Linux `.url` file association.
 
 Bulk actions operate only on the visibly filtered capture set, show the count,
 and use archive rather than permanent deletion. Every permanent deletion and
 Journal deletion has a cancellation-safe confirmation dialog.
 
-When a Дело is renamed, the Inbox service migrates its capture assignments and
-exact domain bindings from the old root to the new root. It does not migrate a
-binding that has been manually changed to another Дело during that operation.
+When a Дело is renamed, the Inbox service updates the path cache of captures
+and exact domain bindings with that `workspaceId`; no relation is keyed by the
+old root path. It does not update a binding that has been manually changed to a
+different workspace ID during that operation.
 
-When a Дело goes to Trash, assignments and bindings become `trashed` with the
-Desktop trash ID. They remain visible as unavailable historical context but are
-not used for automatic routing. A restore event carrying that trash ID restores
-the assignment/binding, including a restored path changed by a collision. A
-permanent trash purge changes captures to unassigned and changes bindings to a
-visible `orphaned` state that the user can reassign or remove. Activity remains
-historical and labels the case as deleted. If a case disappears by external
-filesystem change, active references become `unavailable`, automatic routing is
-disabled, and the user must explicitly reassign or remove them; a newly created
-folder with the same name never steals those references.
+When a Дело goes to Trash, assignments and bindings for its `workspaceId`
+become `trashed` with the Desktop trash ID. They remain visible as unavailable
+historical context but are not used for automatic routing. A restore event
+carrying that trash ID restores the same ID's assignment/binding, including a
+restored path changed by a collision. A permanent trash purge changes captures
+to unassigned and changes bindings to a visible `orphaned` state that the user
+can reassign or remove. Activity remains historical and labels the case as
+deleted. If a case disappears by external filesystem change, active references
+become `unavailable`, automatic routing is disabled, and the user must
+explicitly reassign or remove them; a newly created folder with the same name
+has a different `workspaceId` and never steals those references.
 
 ### Archive and filters
 
@@ -336,6 +407,16 @@ appearing in the normal queue. **Restore to Inbox** changes `globalState` back
 to `active`. Archive supports a visible filtered bulk restore with a count and
 confirmation. A capture assigned to a Дело remains visible in that Дело's Inbox
 regardless of its global archive state, with an Archive badge.
+
+### Opening saved links on Linux
+
+The platform adds a user-initiated `urls.openExternal` capability and API. It
+accepts only a validated HTTP(S) URL and opens that URL through the system
+browser opener (`xdg-open` in the Linux alpha); it never passes a `.url` file
+path to the opener. Browser Inbox uses this capability for **Open link** and
+for a saved `.url` after parsing and validating its `URL=` value. The Files
+surface recognizes a valid `.url` file and uses the same URL-opening path. This
+does not depend on desktop file-association support for InternetShortcut files.
 
 ## Alpha interface
 
@@ -350,6 +431,9 @@ regardless of its global archive state, with an Archive badge.
   active unprocessed Inbox records, and existing urgent Todos, in that order
   within their respective priority. An Inbox record is new/needs attention
   while it is active and unprocessed, without an arbitrary age cutoff.
+- Todo rows are included only when a loaded plugin exposes the `todo.workspace`
+  capability. A missing or disabled Todo plugin is not an Overview error and
+  contributes no placeholder rows.
 - **Continue work** shows at most four distinct case-scoped entities from the
   last 14 days: unfinished Todo, unprocessed capture, and the most recent
   note/file/Journal entity. Every item carries `lastMeaningfulAt`; items sort
@@ -398,11 +482,14 @@ Automated checks must cover:
 - Desktop activity receiver authentication, canonical normalization,
   validation, idempotency, binding, and event publication;
 - append-only Activity log retention/compaction, background subscription
-  lifecycle, handled watermarks, across-midnight review, Journal handoff,
-  local dates, case-scoped clear, and missing-Journal feedback;
+  lifecycle, UUID workspace/unassigned session scopes, point-event duration
+  calculation, immutable session IDs/late events, handled watermarks,
+  across-midnight review, Journal handoff, local dates, case-scoped clear, and
+  missing-Journal feedback;
 - assigning, archiving, restoring, unlinking, permanent deletion, `.url`
   naming/collision/readonly behaviour, filtered bulk operations, rename, trash
-  restore/purge, and external-workspace unavailability;
+  restore/purge, external-workspace unavailability, duplicate-workspace-ID
+  repair, and direct Linux URL opening without `.url` association;
 - normal and debug-mode plugin tab labels;
 - the corrected frontend Wails mock, deterministic Overview limits/scoping,
   plus the end-to-end flows activity-to-Journal and Inbox-to-Дело.

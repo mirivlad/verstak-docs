@@ -18,25 +18,26 @@
 
 ## Схемы SDK
 
-Схемы данных и контракты SDK находятся в репозитории [`verstak-sdk`](https://git.mirv.top/verstak/verstak-sdk).
+Схемы данных и контракты SDK находятся в репозитории
+[`verstak-sdk`](https://github.com/mirivlad/verstak-sdk).
 
-- [Manifest Schema](../verstak-sdk/schemas/manifest.json)
-- [Capabilities](../verstak-sdk/schemas/capabilities.json)
-- [Contributions](../verstak-sdk/schemas/contributions.json)
-- [Permissions](../verstak-sdk/schemas/permissions.json)
-- [Event Schemas](../verstak-sdk/schemas/events/)
-- [Sync Operations](../verstak-sdk/schemas/sync.json)
+- [Manifest Schema](https://github.com/mirivlad/verstak-sdk/blob/main/schemas/manifest.json)
+- [Capabilities](https://github.com/mirivlad/verstak-sdk/blob/main/schemas/capabilities.json)
+- [Contributions](https://github.com/mirivlad/verstak-sdk/blob/main/schemas/contributions.json)
+- [Permissions](https://github.com/mirivlad/verstak-sdk/blob/main/schemas/permissions.json)
+- [Event Schemas](https://github.com/mirivlad/verstak-sdk/tree/main/schemas/events)
+- [Sync Operations](https://github.com/mirivlad/verstak-sdk/blob/main/schemas/sync.json)
 
 ## Репозитории
 
 | Репозиторий | Назначение |
 |---|---|
-| `verstak-desktop` | Core Platform + UI Shell |
-| `verstak-official-plugins` | Официальные плагины |
-| `verstak-sdk` | Plugin SDK и схемы |
-| `verstak-sync-server` | Сервер синхронизации |
-| `verstak-browser-extension` | Расширение браузера |
-| `verstak-docs` | Документация |
+| [`verstak`](https://github.com/mirivlad/verstak) | Core Platform + UI Shell |
+| [`verstak-official-plugins`](https://github.com/mirivlad/verstak-official-plugins) | Официальные плагины |
+| [`verstak-sdk`](https://github.com/mirivlad/verstak-sdk) | Plugin SDK и схемы |
+| [`verstak-sync-server`](https://github.com/mirivlad/verstak-sync-server) | Сервер синхронизации |
+| [`verstak-browser-extension`](https://github.com/mirivlad/verstak-browser-extension) | Расширение браузера |
+| [`verstak-docs`](https://github.com/mirivlad/verstak-docs) | Документация |
 
 ## Лицензия
 

@@ -122,8 +122,8 @@ Verification:
 
 ### Phase 3 - Sync Hardening
 
-Goal: make bounded cross-device file/workspace sync reliable without claiming
-that the server owns vault state or that Blob transport already exists.
+Goal: make local-first cross-device file/workspace sync reliable and harden the
+optional self-hosted relay without making it the source of vault truth.
 
 Verified in the current implementation:
 
@@ -146,24 +146,41 @@ Verified in the current implementation:
 - [x] add real two-vault smoke scenarios for external create/update/delete,
   scanner-based rename representation, no remote echo, and workspace lifecycle;
 - [x] document deployment and backup procedures for `verstak-sync-server`.
+- [x] bind sync-server to loopback by default, set HTTP timeouts/graceful
+  shutdown, publish health/readiness/build data, and document nginx/Caddy
+  trusted-proxy deployment;
+- [x] bound JSON/push fields and pull pages, return stable public error codes,
+  and make Desktop stop/persist cursor at the first failed page operation;
+- [x] add streamed Blob transport with SHA-256/size verification, atomic local
+  apply, per-user/vault ownership references, file/quota limits, and immediate
+  revoked-device denial;
+- [x] hash newly issued device, session, confirmation, and reset tokens;
+  persist sessions, require CSRF for browser mutations, and use transactions
+  for pairing, credential, blob, and multi-table user/device changes.
 
 Known limits in this phase:
 
-- [x] File payloads remain bounded to the current 2 MB text / 8 MB byte Files
-  APIs. A larger or unsupported file is a persistent visible warning and is
-  deliberately not marked synchronized.
+- [x] The Files plugin API remains bounded to 2 MB text / 8 MB byte reads;
+  core sync itself sends binary/larger files through the Blob API. Files over
+  configured Blob/quota limits remain persistent visible warnings and are not
+  marked synchronized.
 - [x] External rename is represented as delete + create; it is not a
   cross-device rename detector for ordinary files.
-- [ ] There is no Desktop Blob transport, quota enforcement, pull pagination,
-  operation retention/compaction, or automatic conflict resolution.
+- [ ] Automatic conflict resolution is intentionally absent. Operation-log
+  retention/compaction is also intentionally deferred: without a server
+  checkpoint/materialized state and proven device recovery cursors, pruning
+  operations could make a newly paired device unrecoverable. Safe cleanup is
+  limited to sessions/tokens/idempotency/audit/temp uploads/rate buckets.
 - [ ] Secrets, plugin settings, Todo, Journal, Activity, and Browser Inbox are
   not synchronized in this phase.
 
 Verification:
 
-- sync server `go test ./...`;
-- desktop real sync smoke;
-- official Sync plugin settings/status tests.
+- sync server `go test ./...`, `go vet ./...`, systemd validation and a local
+  release-package smoke;
+- desktop unit/API tests and real two-vault smoke including a binary above the
+  former inline limit;
+- SDK schema/type checks and official Sync plugin build/localization checks.
 
 ### Phase 4 - Preview, Search, Activity, Journal
 
@@ -290,9 +307,10 @@ Verification:
 2. [x] Status bar item host in `verstak-desktop`.
 3. [x] External open public v2 API to replace Files fallback.
 4. [x] Notes trash/delete UX in `verstak-official-plugins`.
-5. [~] Bounded sync hardening pass with expanded real two-vault smoke. Blob
-   transport, quota/pagination/retention, and additional data domains remain
-   future work.
+5. [x] Sync hardening pass: snapshots/reconciliation, workspace identity,
+   bounded pagination, Blob transport/ownership/quota, secure token/session
+   policy, and expanded real two-vault smoke. Checkpoint-based operation
+   retention and additional data domains remain future work.
 6. [x] Browser inbox protocol design, extension scaffold, local receiver,
    minimal inbox plugin, and note/link/text-file/binary-file conversions are
    implemented.

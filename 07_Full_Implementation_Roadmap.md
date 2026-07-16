@@ -7,8 +7,9 @@ Bring Verstak2 to a complete standalone local-first desktop product:
 - core platform and UI shell can run without official plugins;
 - official plugins provide the user-facing tools;
 - vault data stays human-readable and local-first;
-- sync, browser capture, activity, journal, preview, search, and secrets are
-  plugin/runtime extensions, not mandatory core modules;
+- sync UI/settings, browser capture, activity, journal, preview, search, and
+  secrets are plugin/runtime extensions; sync correctness (scanner, operation
+  log, reconciliation, and workspace identity) stays in Desktop core;
 - no compatibility bridge to the first Verstak version is introduced.
 
 ## 2. Non-negotiable Constraints
@@ -33,7 +34,8 @@ Implemented:
 - Command Palette UI host for `commands` contributions;
 - Status Bar UI host for `statusBarItems`, vault status, and settings menu;
 - workspace top-level folder model and workspace item host;
-- Files Core text API with safe path policy and sync operation recording;
+- Files Core API with safe path policy, durable snapshot scanning, and core sync
+  operation recording;
 - public `files.openExternal` / `files.showInFolder` API and Files plugin usage;
 - mode-aware Workbench open/edit provider routing and default editor plugin;
 - official Files plugin, Notes plugin, Markdown Editor plugin, Search plugin,
@@ -120,17 +122,42 @@ Verification:
 
 ### Phase 3 - Sync Hardening
 
-Goal: make cross-device sync reliable enough for real vaults.
+Goal: make bounded cross-device file/workspace sync reliable without claiming
+that the server owns vault state or that Blob transport already exists.
 
-Tasks:
+Verified in the current implementation:
 
 - [x] define conflict UX contract for desktop and sync plugin;
 - [x] add server/device revocation checks for sync auth paths;
 - [x] persist and display sync errors in Sync plugin;
 - [x] add retry/backoff for sync client operations;
-- [x] add real two-vault sync smoke scenarios for create/update/move/trash
-  folders and files;
+- [x] persist an atomic core snapshot under `.verstak/sync/`; scan on vault
+  open, before manual sync, and after watcher debounce; exclude internal paths,
+  trash, temporary files, and symlinks;
+- [x] reconcile initial vaults safely: pull before local bootstrap, never turn
+  an empty initial snapshot into deletes, and stop on an incompatible
+  local/remote path conflict;
+- [x] apply pulled operations strictly by `server_sequence`, stop at the first
+  failed operation, retain cursor/retry state across restart, and avoid watcher
+  echo after a successful remote apply;
+- [x] sync workspace/Deal create, rename, trash, and restore through a
+  core-owned entity carrying the durable `workspaceId` rather than exposing the
+  workspace marker to plugins;
+- [x] add real two-vault smoke scenarios for external create/update/delete,
+  scanner-based rename representation, no remote echo, and workspace lifecycle;
 - [x] document deployment and backup procedures for `verstak-sync-server`.
+
+Known limits in this phase:
+
+- [x] File payloads remain bounded to the current 2 MB text / 8 MB byte Files
+  APIs. A larger or unsupported file is a persistent visible warning and is
+  deliberately not marked synchronized.
+- [x] External rename is represented as delete + create; it is not a
+  cross-device rename detector for ordinary files.
+- [ ] There is no Desktop Blob transport, quota enforcement, pull pagination,
+  operation retention/compaction, or automatic conflict resolution.
+- [ ] Secrets, plugin settings, Todo, Journal, Activity, and Browser Inbox are
+  not synchronized in this phase.
 
 Verification:
 
@@ -263,7 +290,9 @@ Verification:
 2. [x] Status bar item host in `verstak-desktop`.
 3. [x] External open public v2 API to replace Files fallback.
 4. [x] Notes trash/delete UX in `verstak-official-plugins`.
-5. [x] Sync hardening pass with expanded real two-vault smoke.
+5. [~] Bounded sync hardening pass with expanded real two-vault smoke. Blob
+   transport, quota/pagination/retention, and additional data domains remain
+   future work.
 6. [x] Browser inbox protocol design, extension scaffold, local receiver,
    minimal inbox plugin, and note/link/text-file/binary-file conversions are
    implemented.

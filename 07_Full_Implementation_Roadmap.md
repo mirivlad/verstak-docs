@@ -168,7 +168,7 @@ Verified in the current implementation:
   templates; add locale-aware timestamps, local confirmation dialog, safe
   public-form CSRF, server-side filters/sorting/pagination, user email
   confirmation/device lifecycle actions, one-time generated admin password
-  resets without URL/audit/cookie/plaintext persistence, vault metadata diagnostics without file
+  resets without URL/initial-HTML/audit/cookie/plaintext persistence, vault metadata diagnostics without file
   payloads, sanitised diagnostics download, and an interactive headless-
   Chromium smoke script without npm dependencies.
 

@@ -163,6 +163,9 @@ Verified in the current implementation:
   users, devices, vaults, storage, audit, SMTP settings, and diagnostics;
   protect its mutations with sessions, CSRF, security headers, and
   administrator re-authentication for sensitive changes.
+- [x] remove the former hardcoded server HTML, add bounded admin list queries,
+  vault aggregate/detail diagnostics without file payloads, sanitised admin
+  diagnostics download, and a real headless-Chromium smoke script.
 
 Known limits in this phase:
 

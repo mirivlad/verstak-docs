@@ -157,6 +157,12 @@ Verified in the current implementation:
 - [x] hash newly issued device, session, confirmation, and reset tokens;
   persist sessions, require CSRF for browser mutations, and use transactions
   for pairing, credential, blob, and multi-table user/device changes.
+- [x] add an embedded, dependency-free sync-server web console with shared
+  responsive templates for public/account/admin flows, Russian/English/system
+  locale preference, user device revoke, and operational admin sections for
+  users, devices, vaults, storage, audit, SMTP settings, and diagnostics;
+  protect its mutations with sessions, CSRF, security headers, and
+  administrator re-authentication for sensitive changes.
 
 Known limits in this phase:
 
@@ -173,6 +179,10 @@ Known limits in this phase:
   limited to sessions/tokens/idempotency/audit/temp uploads/rate buckets.
 - [ ] Secrets, plugin settings, Todo, Journal, Activity, and Browser Inbox are
   not synchronized in this phase.
+- [ ] The embedded control plane intentionally remains server-rendered. A
+  separate milestone may improve its visual design or add richer client-side
+  interactions, but must preserve the local-first desktop model and server-side
+  authorization/CSRF checks.
 
 Verification:
 

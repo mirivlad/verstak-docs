@@ -163,9 +163,14 @@ Verified in the current implementation:
   users, devices, vaults, storage, audit, SMTP settings, and diagnostics;
   protect its mutations with sessions, CSRF, security headers, and
   administrator re-authentication for sensitive changes.
-- [x] remove the former hardcoded server HTML, add bounded admin list queries,
-  vault aggregate/detail diagnostics without file payloads, sanitised admin
-  diagnostics download, and a real headless-Chromium smoke script.
+- [x] remove the former hardcoded server HTML and split the embedded console
+  into shared layout/sidebar plus public, account, and per-admin-section
+  templates; add locale-aware timestamps, local confirmation dialog, safe
+  public-form CSRF, server-side filters/sorting/pagination, user email
+  confirmation/device lifecycle actions, one-time generated admin password
+  resets without URL/audit/cookie/plaintext persistence, vault metadata diagnostics without file
+  payloads, sanitised diagnostics download, and an interactive headless-
+  Chromium smoke script without npm dependencies.
 
 Known limits in this phase:
 

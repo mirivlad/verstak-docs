@@ -26,11 +26,11 @@
 
 Перед работой прочитать:
 
-- `verstak-platform-docs/01_Product_Vision.md`
-- `verstak-platform-docs/02_Platform_Architecture.md`
-- `verstak-platform-docs/04_Plugin_System.md`
-- `verstak-platform-docs/05_Official_Plugins.md`
-- `verstak-platform-docs/06_Migration_Strategy.md`
+- `verstak-docs/01_Product_Vision.md`
+- `verstak-docs/02_Platform_Architecture.md`
+- `verstak-docs/04_Plugin_System.md`
+- `verstak-docs/05_Official_Plugins.md`
+- `verstak-docs/06_Migration_Strategy.md`
 
 Если код противоречит документам, не молча подгонять документы под код. Сначала понять, это старый монолитный долг или осознанное новое решение.
 

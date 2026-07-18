@@ -2,9 +2,7 @@
 
 ## 1. Цель
 
-Verstak v2 разрабатывается как отдельное приложение и платформа. Цель -
-собрать рабочий local-first vault вокруг дел без временных мостов к первой
-версии:
+Verstak развивается как local-first платформа с динамическими плагинами:
 
 - local-first vault;
 - дела как центр контекста;
@@ -12,23 +10,19 @@ Verstak v2 разрабатывается как отдельное прилож
 - заметки, файлы, журнал, активность, браузерные материалы вокруг дела;
 - синхронизация и расширение как отдельные части, а не ядро смысла.
 
-Это не миграция v1 -> v2 и не перенос старого монолита частями. Это развитие
-самостоятельной платформенной модели.
-
 ## 2. Нельзя делать
 
 - Нельзя добавлять новые функции в монолитный `App.svelte`.
 - Нельзя делать official plugins скрытыми compile-time modules.
 - Нельзя связывать плагины по именам, если нужна capability.
 - Нельзя делать notes/files/editor обязательными частями core.
-- Нельзя добавлять временные compatibility bridges к первой версии.
-- Нельзя менять v2 vault layout без явного плана изменения формата.
+- Нельзя менять vault layout без явного плана изменения формата.
 - Нельзя хранить секреты как обычные заметки или plain text.
 - Нельзя молча менять title/filename note при конфликте.
 
 ## 3. Этап 1 - Platform Skeleton
 
-Сделать в `verstak-desktop`:
+Сделано в `verstak-desktop`:
 
 - plugin manifest schema;
 - plugin discovery from plugin directories;
@@ -41,17 +35,9 @@ Verstak v2 разрабатывается как отдельное прилож
 - basic event bus;
 - diagnostics panel.
 
-Проверки:
-
-- приложение запускается без плагинов;
-- приложение показывает пустой Plugin Manager;
-- тестовый плагин появляется в списке;
-- enable/disable работает;
-- failed plugin не роняет приложение.
-
 ## 4. Этап 2 - Frontend Plugin Host
 
-Сделать:
+Сделано:
 
 - загрузку frontend bundle;
 - `VerstakPluginAPI`;
@@ -59,16 +45,11 @@ Verstak v2 разрабатывается как отдельное прилож
 - plugin UI error boundary;
 - settings panel invocation from Plugin Manager.
 
-Проверки:
-
-- тестовый плагин регистрирует view;
-- тестовый плагин регистрирует settings panel;
-- выключение плагина убирает view/settings;
-- ошибка в plugin UI не роняет shell.
-
 ## 5. Этап 3 - Backend Sidecar Host
 
-Сделать:
+Отложено до отдельного milestone.
+
+План:
 
 - sidecar launch protocol;
 - local RPC;
@@ -76,57 +57,63 @@ Verstak v2 разрабатывается как отдельное прилож
 - sidecar shutdown/restart;
 - logs/diagnostics.
 
-Проверки:
-
-- sidecar отвечает health check;
-- sidecar не получает API без permissions;
-- падение sidecar переводит плагин в failed;
-- disable останавливает sidecar.
-
 ## 6. Этап 4 - Official Plugin Development
 
-Развивать official plugins по одному, через общий plugin runtime:
+Развиваются по одному, через общий plugin runtime:
 
-1. `official.markdown-editor`;
-2. `official.files`;
-3. `official.notes`;
-4. `official.file-preview`;
-5. `official.activity`;
-6. `official.browser-inbox`.
+1. `verstak.default-editor` ✅
+2. `verstak.files` ✅
+3. `verstak.notes` ✅
+4. `verstak.file-preview` ✅ (базовый)
+5. `verstak.activity` ✅
+6. `verstak.journal` ✅ (базовый)
+7. `verstak.browser-inbox` ✅
+8. `verstak.search` ✅ (базовый)
+9. `verstak.secrets` ✅
+10. `verstak.todo` ✅
+11. `verstak.trash` ✅
+12. `verstak.sync` ✅
+13. `verstak.templates` ✅
 
-После каждого выноса:
+После каждого изменения:
 
 - проверить build;
 - проверить запуск;
 - проверить Plugin Manager;
 - проверить enable/disable;
 - проверить degraded mode при отключении optional plugin;
-- проверить, что v2 vault остается читаемым и не получает скрытых
-  plugin-specific truth-слоев для пользовательских документов;
+- проверить, что vault остается читаемым;
 - проверить, что UI contributions исчезают при disable.
 
 ## 7. Этап 5 - Repository Split
 
-Когда plugin runtime работает:
+Выполнено:
 
-- оставить core и shell в `verstak-desktop`;
-- вынести official plugins в `verstak-official-plugins`;
-- вынести sync server в `verstak-sync-server`;
-- вынести browser extension в `verstak-browser-extension`;
-- выделить `verstak-sdk` после стабилизации API.
+- core и shell в `verstak-desktop`;
+- official plugins в `verstak-official-plugins`;
+- sync server в `verstak-sync-server`;
+- browser extension в `verstak-browser-extension`;
+- SDK в `verstak-sdk`;
+- документация в `verstak-docs`.
 
-Не начинать с физического split repo, пока runtime не умеет грузить плагины локально.
+## 8. Definition Of Done (текущий статус)
 
-## 8. Definition Of Done
+Платформенный переход состоялся:
 
-Платформенный переход можно считать состоявшимся, когда:
+- [x] core запускается без official plugins;
+- [x] official plugins лежат вне core modules;
+- [x] notes/files/editor/preview/activity работают как плагины;
+- [x] Plugin Manager умеет включать/выключать плагины;
+- [x] плагин может иметь свое settings окно;
+- [x] capability registry управляет видимостью actions;
+- [x] отсутствие optional capability не считается ошибкой;
+- [x] vault layout стабилен и читаем;
+- [x] документация соответствует реализации (в процессе).
 
-- core запускается без official plugins;
-- official plugins лежат вне core modules;
-- notes/files/editor/preview/activity работают как плагины;
-- Plugin Manager умеет включать/выключать плагины;
-- плагин может иметь свое settings окно;
-- capability registry управляет видимостью actions;
-- отсутствие optional capability не считается ошибкой;
-- v2 vault layout остается стабильным и читаемым без compatibility bridges к v1;
-- документация соответствует реализации.
+Оставшиеся крупные задачи:
+
+- [ ] Sidecar/sandbox изоляция;
+- [ ] Production-grade packaging и автообновление;
+- [ ] Operation-log retention (sync server);
+- [ ] Синхронизация Secrets, plugin settings, Todo, Journal, Activity, Browser Inbox;
+- [ ] UX-полировка (Today flow, mobile layout, search в workspace header).

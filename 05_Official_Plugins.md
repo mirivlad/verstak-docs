@@ -1,21 +1,25 @@
 # Official Plugins
 
-Официальные плагины - это базовый набор инструментов Верстака. Они не должны быть скрытыми частями core. Их задача - показать, что платформа действительно работает через capabilities и contribution points.
+Официальные плагины — базовый набор инструментов Верстака. Они используют тот же
+plugin runtime, что и сторонние. Их задача — показать, что платформа работает
+через capabilities и contribution points.
 
-## 1. `official.files`
+Все официальные плагины используют префикс `verstak.*` в id.
+
+## 1. `verstak.files`
 
 Назначение:
 
 - дерево/список файлов внутри дела;
-- добавление файлов;
-- перемещение/копирование в vault;
-- открытие системным приложением;
-- file metadata;
-- file actions registry consumer.
+- добавление файлов и папок;
+- перемещение/переименование;
+- открытие через Workbench (openProvider routing);
+- trash/restore (через `verstak.trash`);
+- file metadata.
 
 Provides:
 
-```text
+```
 workspace.files
 vault.files
 entity.file
@@ -24,72 +28,64 @@ file.browser
 
 Optional requires:
 
-```text
+```
 editor.text
 viewer.file
 preview.file
 search.provider
 ```
 
-Поведение:
+Текущий статус: реализован. Открывает файлы через `api.workbench.openResource()`,
+не импортирует редактор напрямую. Корзина выделена в отдельный плагин `verstak.trash`.
 
-- если есть подходящий editor capability, показывает "Edit";
-- если есть viewer/preview capability, показывает "Preview";
-- если подходящего provider/capability нет, показывает понятное no-provider
-  состояние; открытие внешним приложением остается отдельной отложенной
-  возможностью.
-
-## 2. `official.notes`
+## 2. `verstak.notes`
 
 Назначение:
 
-- markdown notes as a UI-level context over ordinary Markdown files;
-- canonical `Notes/` folder inside case/project;
-- `Overview.md` is allowed only as an ordinary Markdown filename, not as a
-  special UI entity;
+- markdown notes как UI-слой над обычными `.md` файлами;
+- каноническая папка `Notes/` внутри дела;
+- `Overview.md` — обычное markdown-имя файла, не специальная UI-сущность;
 - note metadata;
-- note links.
+- rename с синхронизацией title/filename;
+- conflict dialog при конфликте имён.
 
 Provides:
 
-```text
+```
 workspace.notes
 note.registry
 ```
 
 Requires:
 
-```text
-vault.files
+```
+verstak/core/files/v1
 ```
 
 Optional requires:
 
-```text
+```
 editor.text.markdown
-preview.markdown
 search.provider
 ```
 
-Важное правило:
+Текущий статус: реализован. Title и filename синхронизированы. При конфликте
+имени показывается conflict dialog.
 
-- title и filename должны оставаться синхронизированными;
-- filename - человекочитаемая проекция title;
-- при конфликте имени не добавлять `_2` молча, а показывать понятный conflict dialog.
-
-## 3. `official.markdown-editor`
+## 3. `verstak.default-editor`
 
 Назначение:
 
-- редактирование markdown/text;
+- редактирование текста и markdown;
 - toolbar;
 - save flow;
 - dirty state;
-- keyboard shortcuts.
+- markdown preview (встроен, не отдельный плагин);
+- keyboard shortcuts (Ctrl+S).
 
 Provides:
 
-```text
+```
 editor.text
 editor.text.markdown
 editor.note.markdown
@@ -97,52 +93,47 @@ editor.note.markdown
 
 Optional requires:
 
-```text
+```
 link.resolver
 ```
 
-Не должен:
+Текущий статус: реализован как единый плагин с тремя openProviders
+(`text`, `generic-markdown`, `notes-markdown`). Использует `api.files.readText` /
+`api.files.writeText`. Markdown preview — часть редактора, без отдельного
+плагина предпросмотра.
 
-- сам решать, где хранятся notes;
-- напрямую зависеть от `official.notes`;
-- тащить file manager внутрь себя.
-
-Markdown preview is part of the Markdown editor surface. There is no separate
-official Markdown preview plugin, because a standalone view provider would
-compete with the editor routing for `.md` / `.markdown` files.
-
-## 4. `official.file-preview`
+## 4. `verstak.file-preview`
 
 Назначение:
 
-- inline preview for image files through bounded `api.files.readBytes`;
-- metadata view for previewed files;
-- `Open External` action through `api.files.openExternal`.
+- inline preview для изображений через `api.files.readBytes`;
+- metadata view;
+- `Open External` через `api.files.openExternal`.
 
 Provides:
 
-```text
+```
 viewer.file
 viewer.image
 preview.file
 ```
 
-Текущий статус: базовый `verstak.file-preview` renders image files inline via
-the public Files API and shows file metadata. Text-like files, code, and
-Markdown stay with editor plugins.
+Текущий статус: базовый рендеринг изображений через публичный Files API,
+плюс metadata файла. Текстовые файлы, код и markdown остаются за
+editor-плагинами.
 
-## 5. `official.activity`
+## 5. `verstak.activity`
 
 Назначение:
 
 - сбор activity events;
-- отображение истории;
+- отображение истории активности;
 - реконструкция работы;
-- подсказки для worklog.
+- worklog suggestions для Journal.
 
 Provides:
 
-```text
+```
 activity.log
 activity.provider
 activity.reconstruction
@@ -150,52 +141,33 @@ activity.reconstruction
 
 Subscribes:
 
-```text
+```
 file.opened
 file.changed
 note.saved
 action.started
 browser.capture.received
 case.selected
-browser.capture.page
-browser.capture.selection
-browser.capture.link
-browser.capture.file
-browser.capture.converted
 ```
 
-Текущий статус: базовый `verstak.activity` implemented as both a global sidebar
-view and a workspace item. Workspace tabs store and display only their own
-activity stream; the global sidebar view aggregates activity from all workspace
-streams plus unscoped global activity. It contributes `activityProviders`; the
-desktop runtime hosts those providers and records subscribed public events into
-the plugin storage even when the Activity view is not mounted. The Activity UI
-is a read/clear surface, not a manual recording toggle. It now reconstructs
-compact worklog suggestions from scoped activity streams and exposes them
-through the command-backed `verstak.activity.suggestWorklog` runtime contract
-for the Journal plugin.
+Текущий статус: реализован как глобальный sidebar view и workspace item.
+Workspace tabs хранят свою activity stream; глобальный view агрегирует все
+workspace streams. Предоставляет `activityProviders`; desktop runtime записывает
+события в plugin storage даже когда Activity view не смонтирован. Реконструирует
+worklog suggestions через контракт `verstak.activity.suggestWorklog`.
 
-## Sync Conflict UX Contract
-
-`api.sync.now()` returns warning details through `conflicts` and `applyErrors`.
-The official Sync plugin must display both as warnings after manual sync. A
-conflict warning must include at least the affected entity type/path when the
-server provides those fields. The plugin must not auto-resolve conflicts, rename
-local files, overwrite local files, or hide conflict details behind a plain
-count.
-
-## 6. `official.journal`
+## 6. `verstak.journal`
 
 Назначение:
 
 - ручной журнал работ;
 - billable/non-billable;
-- отчеты по делу/клиенту;
-- принятие suggested time из activity.
+- приём suggested time из activity;
+- создание записи из завершённого todo.
 
 Provides:
 
-```text
+```
 worklog
 journal
 report.worklog
@@ -203,31 +175,27 @@ report.worklog
 
 Optional requires:
 
-```text
+```
 activity.reconstruction
 ```
 
-Текущий статус: базовый `verstak.journal` implemented as both a global sidebar
-view and a workspace item. Workspace views store manual worklog entries in the
-plugin settings namespace, import non-billable entries from
-`verstak.activity.suggestWorklog`, and deduplicate repeated imports by Activity
-suggestion id. The global view aggregates stored workspace worklogs. Billing
-reports, invoice export, timers, and richer report filters are still future
-work.
+Текущий статус: реализован как глобальный sidebar view и workspace item.
+Хранит записи в plugin settings namespace, импортирует не-billable записи
+из `verstak.activity.suggestWorklog`, дедуплицирует по Activity suggestion id.
 
-## 7. `official.browser-inbox`
+## 7. `verstak.browser-inbox`
 
 Назначение:
 
-- прием ссылок, выделенного текста, страниц и snippets из browser extension;
-- pending queue;
-- привязка доменов к делам;
-- создание inbox entries;
-- превращение inbox entry в note/link/file/activity.
+- приём страниц, ссылок, выделенного текста и файлов из browser extension;
+- pending queue с scoping по workspace;
+- domain bindings;
+- конвертация inbox entry в note/link/file;
+- запись конвертаций в Activity.
 
 Provides:
 
-```text
+```
 capture.browser
 browser.inbox
 domain.binding
@@ -235,133 +203,150 @@ domain.binding
 
 Requires:
 
-```text
+```
 network.local
 ```
 
 Optional requires:
 
-```text
+```
 workspace.notes
 activity.log
 search.provider
 ```
 
-Текущий статус: базовый `verstak.browser-inbox` implemented as both a global
-sidebar view and a workspace item. Workspace tabs keep their own pending queue;
-the global sidebar view aggregates queues from all workspaces plus unscoped
-global captures. The local receiver starts in paired mode: it generates an
-installation-local token and requires `X-Verstak-Receiver-Token` before
-publishing browser capture events. The Browser Inbox settings panel exposes the
-receiver URL and token, and rotates the token through the dangerous
-`browser.receiver.manage` permission. Browser Inbox stores plugin-owned
-`domainBindings` and routes unscoped captures with an
-exact domain match into the bound workspace queue. Its first conversion workflow
-creates ordinary Markdown notes through the public Files API and publishes a
-`browser.capture.converted` event, which Activity records through its public
-provider subscription. Browser Inbox also creates human-readable `.url` link
-files through the public Files API. It now accepts selected files from the
-browser extension and creates ordinary workspace files through `api.files.writeText`
-or bounded `api.files.writeBytes`. Chunked large-file attachment capture remains
-future work.
+Текущий статус: реализован как глобальный sidebar view и workspace item.
+Local receiver в paired mode с токеном. Поддерживает конвертацию в note
+(через публичный Files API), link (`.url` файлы), text file attachments
+и bounded binary attachments. Конвертации записываются в Activity.
 
-## 9. `official.search`
+## 8. `verstak.search`
 
 Назначение:
 
-- workspace-scoped search UI;
-- baseline recursive text search through public Files API;
-- search provider contribution for platform discovery;
-- index notes/files/activity/worklog later;
-- typo/layout tolerant search later.
+- workspace-scoped search;
+- поиск по мере ввода;
+- поиск по именам файлов/папок и содержимому текстовых файлов;
+- persistent search index;
+- cross-provider runtime hosting.
 
 Provides:
 
-```text
+```
 search
 search.provider
 search.indexer
 ```
 
-Текущий статус: базовый `verstak.search` implemented as a workspace item and
-`searchProviders` contribution. It searches as the user types, matches vault
-file/folder names and paths, scans text-like file contents through
-`api.files.list` / `api.files.readText`, and opens file results through
-Workbench. It persists a workspace-scoped JSON search index in the plugin data
-namespace, refreshes it from public file events, registers its own vault-text
-provider as a command-backed `searchProviders` handler, and fans out to other
-registered provider commands at runtime. Full-text ranking, typo/layout
-tolerant search, and sidecar indexing remain later work.
+Текущий статус: реализован как workspace item и `searchProviders` contribution.
+Ищет по мере ввода, индексирует vault, обновляет индекс по файловым событиям,
+поддерживает других search providers через runtime.
 
-Target UX: search should be available from the workspace header next to the
-workspace title. The standalone Search workspace item may remain only as an
-expanded results surface; it should not be the primary search entry point.
-
-## 10. `official.secrets`
+## 9. `verstak.secrets`
 
 Назначение:
 
-- защищенное хранилище клиентских доступов;
-- SSH/CMS/VPS/database/API secrets;
-- bridge secret, sync token, device private key, pairing token;
-- permissions for secret access.
+- защищённое хранилище доступов;
+- workspace-scoped secrets;
+- master password (AES-GCM).
 
 Provides:
 
-```text
+```
 secret-store
 secrets.read-ui
 secrets.write-ui
 ```
 
-Важное правило:
+Текущий статус: реализован. Desktop core имеет AES-GCM secret store,
+разблокируемый один раз за сессию. Плагин показывает global и workspace-scoped
+секреты, поддерживает редактирование, удаление, копирование markdown secret links.
+Рендерит `verstak-secret://...` ссылки.
 
-- секреты не должны храниться как обычный markdown/plain text;
-- доступ к secret-store должен идти через permissions;
-- плагины не получают `secrets.read` автоматически.
-
-Текущий статус: platform contract defines `secret-store`, `secrets.read-ui`,
-and `secrets.write-ui` capabilities plus dangerous `secrets.read` /
-`secrets.write` permissions in the SDK manifest contract. Desktop core has a
-local AES-GCM secret store unlocked once per app session by master password.
-The official `verstak.secrets` plugin shows global and workspace-scoped
-secrets grouped by workspace, separates first-run master-password setup from
-later unlock, supports editing and deleting secrets, shows selected secret
-fields as a table, copies markdown secret links, and handles `secret`
-workbench resources. The default editor renders
-`verstak-secret://...` markdown links only when a secrets open-provider is
-enabled, and opens the Secrets plugin without inserting raw values into notes.
-
-## 11. `official.templates`
+## 10. `verstak.todo`
 
 Назначение:
 
-- шаблоны дел;
-- client/project/server/device structures;
-- initial folder/note/action layout.
+- списки задач внутри дел и глобально;
+- статусы: open, done, cancelled;
+- приоритеты, due date, reminders;
+- создание Journal записи из завершённого todo.
 
 Provides:
 
-```text
+```
+workspace.todo
+```
+
+Текущий статус: реализован. Reminders с нативными desktop-уведомлениями
+(при наличии capability `verstak/core/notifications/v1`). Поддерживает
+создание Journal записи из todo с копированием фактических данных.
+
+## 11. `verstak.trash`
+
+Назначение:
+
+- глобальный просмотр удалённых файлов;
+- восстановление из корзины;
+- перманентное удаление.
+
+Provides:
+
+```
+trash.management
+```
+
+Текущий статус: реализован как глобальный sidebar view. Работает
+с internal trash storage (`.verstak/trash/files/`).
+
+## 12. `verstak.sync`
+
+Назначение:
+
+- ручная синхронизация vault;
+- отображение статуса и конфликтов;
+- настройки подключения к sync server.
+
+Provides:
+
+```
+sync.ui
+```
+
+Requires:
+
+```
+network.remote
+```
+
+Текущий статус: реализован как глобальный sidebar view и settings panel.
+Показывает vaultId, статус, unpushed count, ошибки и конфликты.
+Не делает auto-resolve конфликтов.
+
+## 13. `verstak.templates`
+
+Назначение:
+
+- шаблоны дел при создании;
+- предопределённые наборы workspace tools;
+- one-time применение (шаблон не привязан к делу после создания).
+
+Provides:
+
+```
 case.templates
 ```
 
-Optional requires:
+Текущий статус: реализован через built-in templates в desktop core
+(General, Project, Writing, Admin, Minimal). Модальное окно создания
+дела показывает описание шаблона и его вкладки.
 
-```text
-workspace.notes
-workspace.files
-```
+## 14. `verstak.platform-test`
 
-## 12. Первый минимальный набор
+Назначение:
 
-Для первого платформенного этапа достаточно:
+- тестовый плагин для отладки runtime;
+- диагностические панели для проверки API;
+- не для конечных пользователей.
 
-- `official.files`;
-- `official.notes`;
-- `official.markdown-editor`;
-- `official.file-preview`;
-- `official.activity`;
-- `official.browser-inbox`;
-
-Но все они должны быть настоящими динамическими плагинами, даже если поставляются вместе с приложением.
+Текущий статус: используется только при разработке.

@@ -37,7 +37,7 @@ Implemented:
 - public `files.openExternal` / `files.showInFolder` API;
 - mode-aware Workbench open/edit provider routing and default editor plugin;
 - all official plugins: Files, Notes, Default Editor, File Preview, Activity,
-  Journal, Browser Inbox, Search, Secrets, Todo, Trash, Sync, Templates;
+  Journal, Browser Inbox, Search, Secrets, Todo, Trash, Sync, Templates, Import;
 - browser inbox local receiver with paired mode, domain bindings, and
   create-note/link/file conversion;
 - sync server with device/user auth, operation push/pull, Blob transport,
@@ -53,8 +53,10 @@ Implemented:
 Known remaining gaps:
 
 - Sidecar host is not implemented (bundled plugins run in shared JS context).
-- Chunked streaming/large-file import is deferred; bounded text (2 MB) and
-  byte (8 MB) APIs are the current limits.
+- The generic Files API remains bounded to 2 MB text / 8 MB byte reads. The
+  dedicated import runtime now indexes selected directories and supported
+  archives, reads text up to 16 MiB and streams reviewed ordinary files into a
+  staged transaction; chunked random access for plugin analysis is not exposed.
 - UX polish is ongoing: Today flow as work-resume surface, Activity-to-Journal
   review, mobile/responsive layout, search in workspace header.
 - Production-grade packaging, auto-update, and release workflow is partial:
@@ -196,7 +198,30 @@ Tasks:
 
 Status: done.
 
-### Phase 7 - Sidecar/Sandbox Boundary
+### Phase 7 - Reviewed External Import
+
+Goal: import current DokuWiki and Obsidian data through a generic, review-first
+plugin contract without granting plugins arbitrary filesystem access.
+
+Tasks:
+
+- [x] add plugin-owned opaque source sessions and native directory/archive
+  selection;
+- [x] enforce archive, path, size, expansion-ratio, fingerprint and permission
+  boundaries;
+- [x] expose paged inventory, bounded text reads, progress and cancellable
+  staging through the SDK;
+- [x] validate and publish reviewed plans transactionally under `Импортировано`;
+- [x] add startup recovery and isolated names for repeated imports;
+- [x] ship `verstak.import` with current DokuWiki-to-Markdown conversion and
+  Obsidian link rewriting;
+- [x] add synthetic E2E and privacy-safe supplied-backup smoke coverage.
+
+Status: done. Unsupported DokuWiki plugin syntax remains visible with warnings;
+legacy DokuWiki/Obsidian formats and arbitrary custom adapters are outside this
+milestone.
+
+### Phase 8 - Sidecar/Sandbox Boundary
 
 Goal: move from trusted bundled plugin JavaScript toward safer plugin execution.
 
@@ -210,7 +235,7 @@ Tasks:
 
 Status: not started.
 
-### Phase 8 - Packaging, Update, Release
+### Phase 9 - Packaging, Update, Release
 
 Goal: produce installable, recoverable releases.
 
@@ -237,7 +262,8 @@ auto-update, and release smoke checklist are future work.
 5. [x] Sync hardening pass.
 6. [x] Browser inbox protocol, extension scaffold, local receiver, inbox plugin,
    and conversions.
-7. [ ] Product UX follow-up: make the shell-level Today flow the command center
+7. [x] Generic reviewed import runtime and official DokuWiki/Obsidian importer.
+8. [ ] Product UX follow-up: make the shell-level Today flow the command center
    for captures, recent activity, Activity worklog suggestions, and Journal
    import/review. This should reuse existing official plugin contracts instead
    of moving Activity, Browser Inbox, or Journal into desktop core.

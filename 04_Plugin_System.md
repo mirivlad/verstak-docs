@@ -299,6 +299,8 @@ events.publish
 events.subscribe
 ui.register
 commands.register
+imports.readExternal
+imports.apply
 network.local
 network.remote
 process.spawn
@@ -313,7 +315,46 @@ sync.participate
 - `process.spawn`;
 - `secrets.read`;
 - `vault.write`;
+- `imports.readExternal`;
+- `imports.apply`;
 - `sync.participate`.
+
+### 11.1. Generic Import API
+
+Core capability `verstak/core/import/v1` exposes a plugin-scoped `api.imports`
+contract. The host, not the plugin, opens native selectors and owns access to
+the selected directory or archive:
+
+```js
+const source = await api.imports.selectDirectory(); // or selectArchive()
+const page = await api.imports.listEntries(source.sourceHandle, cursor);
+const text = await api.imports.readText(source.sourceHandle, entryId);
+const unsubscribe = api.imports.onProgress(source.sourceHandle, listener);
+const result = await api.imports.applyPlan(source.sourceHandle, reviewedPlan);
+await api.imports.cancel(source.sourceHandle);
+await api.imports.closeSource(source.sourceHandle);
+```
+
+`imports.readExternal` is required to select, enumerate and read a source;
+`imports.apply` is additionally required to publish a reviewed plan. Handles
+are opaque, owned by the plugin that opened them, expire after 30 minutes of
+inactivity, and are closed when the API instance is disposed or the plugin is
+disabled. Plugins receive normalized inventory records and bounded UTF-8 text,
+not arbitrary filesystem paths.
+
+Supported archives are `.zip`, `.tar`, `.tar.gz` and `.tgz`. A source is
+limited to 250,000 entries, 20 GiB unpacked total, 2 GiB per entry, 16 MiB per
+text entry and a 1000:1 expansion ratio. Inventory pages contain up to 500
+entries. Links and special archive entries, traversal, duplicate normalized
+paths and source changes after analysis are rejected.
+
+`applyPlan()` accepts only a validated plan tied to the source handle and
+fingerprint. Core stages all folders, deals, Markdown notes, files and workspace
+metadata under `.verstak/import-staging`, checks free disk space, then publishes
+the run atomically under `Импортировано`. Startup recovery removes or rolls back
+an interrupted transaction using its private journal. Cancellation is allowed
+during validation and staging, but not after publication begins; progress
+reports `validating`, `staging`, `publishing` and `refreshing` phases.
 
 ## 12. Data Ownership
 

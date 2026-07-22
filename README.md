@@ -26,6 +26,10 @@ Architecture artifacts for the Verstak platform.
 - [Development Strategy](06_Migration_Strategy.md) — platform evolution
 - [Implementation Roadmap](07_Full_Implementation_Roadmap.md) — full roadmap with phase status
 
+The current official set includes a review-first DokuWiki and Obsidian importer:
+it analyzes a selected folder or supported archive, proposes an editable
+structure, and publishes only the confirmed plan under `Импортировано`.
+
 ## SDK Schemas
 
 Data schemas and SDK contracts live in the

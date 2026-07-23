@@ -95,6 +95,11 @@ orientation value, not alphabetically. The first tabs should help the user
 resume work in the case quickly; lower-frequency tools should move farther from
 the initial focus.
 
+The vault tree uses durable UUID identities for folders and Deals. A
+user-defined mixed sibling order is part of vault organization and synchronizes
+between devices. Sidebar width, scroll position, temporary expansion, and
+current selection remain device-local UI state.
+
 ## 4. Vault
 
 Vault остается пользовательским рабочим пространством. Он должен быть максимально понятным снаружи.
@@ -279,8 +284,12 @@ Sync server и browser extension выносятся в отдельные реп
 Sync не должен знать о внутренних UI-плагинах. Он синхронизирует:
 
 - vault metadata;
+- семантическую структуру и пользовательский порядок дерева vault;
 - files/blobs;
 - plugin state where allowed;
 - plugin data через зарегистрированные storage namespaces.
 
-Плагины должны явно указывать, какие данные можно синхронизировать, а какие локальны только на устройстве.
+Внутренние метаданные дерева передаются отдельными sync-сущностями; общий запрет
+на синхронизацию служебных путей `.verstak` не ослабляется. Плагины должны явно
+указывать, какие данные можно синхронизировать, а какие локальны только на
+устройстве.

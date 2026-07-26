@@ -106,7 +106,8 @@ plugins/
 - page capture, selection, link, file;
 - pending queue;
 - domain bindings;
-- passive domain activity (opt-in).
+- passive page activity, opt-in: the page address without its fragment, plus
+  time spent.
 
 ### `verstak-docs`
 

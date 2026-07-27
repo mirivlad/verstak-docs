@@ -157,8 +157,33 @@ case.selected
 Текущий статус: реализован как глобальный sidebar view и workspace item.
 Workspace tabs хранят свою activity stream; глобальный view агрегирует все
 workspace streams. Предоставляет `activityProviders`; desktop runtime записывает
-события в plugin storage даже когда Activity view не смонтирован. Реконструирует
-worklog suggestions через контракт `verstak.activity.suggestWorklog`.
+события в plugin storage даже когда Activity view не смонтирован.
+
+Команды регистрируются в `activate(api)` — bundle-level hook, который shell
+вызывает один раз без монтирования вида. До этого обработчики жили только внутри
+`mount()`, и Журнал мог дотянуться до предложений ровно тогда, когда
+пользователь смотрел на Активность вместо Журнала.
+
+Команды:
+
+```
+verstak.activity.suggestWorklog          — возможные записи журнала
+verstak.activity.listBrowserActivity     — записанное время по страницам
+verstak.activity.assignBrowserActivity   — Дело, открепление или «не работа»
+verstak.activity.listBrowserActivityRules
+verstak.activity.setBrowserActivityRule
+verstak.activity.removeBrowserActivityRule
+```
+
+Время браузера приходит не привязанным ни к чему: расширение не знает, ради
+какого Дела открыта страница. Активность решает это тремя способами, в порядке
+приоритета: ответ пользователя, правило по адресу, предположение по соседним
+во времени событиям одного Дела. Предположения не делаются, когда рядом два
+Дела. Каждая запись несёт `assignedBy`, и правило никогда не переписывает
+ответ, данный руками.
+
+Предложение несёт разбивку по видам работ, минуты которой в сумме дают общее
+время, и признак `guessed` — по нему Журнал спрашивает, а не утверждает.
 
 ## 6. `verstak.journal`
 
@@ -184,8 +209,14 @@ activity.reconstruction
 ```
 
 Текущий статус: реализован как глобальный sidebar view и workspace item.
-Хранит записи в plugin settings namespace, импортирует не-billable записи
-из `verstak.activity.suggestWorklog`, дедуплицирует по Activity suggestion id.
+Хранит записи в plugin settings namespace. Спрашивает предложения у всех, кто
+объявил contribution point `worklogProviders`, а не у Активности по имени;
+дедуплицирует по Activity suggestion id.
+
+Глобальный список показывает все записи и все предложения с фильтрами по Делу,
+отметке к оплате и источнику записи. Предложение с угаданным Делом
+показывается вопросом — «Да, <Дело>» / «Другое Дело…» / «Не работа», — и любой
+ответ пишет правило про адрес страницы.
 
 ## 7. `verstak.browser-inbox`
 

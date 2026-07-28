@@ -59,8 +59,9 @@ Known remaining gaps:
   staged transaction; chunked random access for plugin analysis is not exposed.
 - UX polish is ongoing: Today flow as work-resume surface, mobile/responsive
   layout, search in workspace header.
-- Production-grade packaging, auto-update, and release workflow is partial:
-  build scripts exist, but not a polished update channel.
+- Production-grade packaging and release workflow: build scripts, package
+  checksums, diagnostics collection and a release checklist exist; a signed
+  auto-update channel does not.
 - Sync operation-log retention/compaction is intentionally deferred.
 - Plugins declare which of their record sets travel; Todo does, and its list is
   carried record by record. Journal entries are ordinary vault files and travel
@@ -250,13 +251,22 @@ Tasks:
   browser extension);
 - [x] add build scripts for .deb, AppImage, Windows portable, and plugin
   packages;
-- [ ] add plugin package signing/verification or equivalent integrity checks;
+- [x] add plugin package signing/verification or equivalent integrity checks —
+  every package carries `checksums.txt` and discovery verifies it. A checksum
+  catches damage and staleness, not somebody who meant it; signing still needs
+  a key nobody has yet;
 - [x] add backup/restore docs for vault and sync server;
-- [ ] add crash/log collection for local diagnostics;
-- [ ] build release smoke checklist.
+- [x] add crash/log collection for local diagnostics — every run writes a
+  session log, a panic writes its own report, and Settings → Diagnostics saves
+  a report with no vault contents, secrets or sync key in it;
+- [x] build release smoke checklist — `scripts/release-smoke.sh` for what a
+  script can answer, `docs/RELEASE_CHECKLIST.md` for what only a person can.
 
-Status: packaging scripts exist and produce release artifacts. Signing,
-auto-update, and release smoke checklist are future work.
+Status: packaging scripts produce release artifacts, packages carry checksums
+that discovery verifies, diagnostics can be collected without a terminal, and
+the release has a checklist with a script behind the automatable half. Package
+signing and an auto-update channel are future work; both need a key and a
+distribution point that do not exist yet.
 
 ## 5. Immediate Execution Order
 

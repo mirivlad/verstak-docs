@@ -57,8 +57,8 @@ Known remaining gaps:
   dedicated import runtime now indexes selected directories and supported
   archives, reads text up to 16 MiB and streams reviewed ordinary files into a
   staged transaction; chunked random access for plugin analysis is not exposed.
-- UX polish is ongoing: Today flow as work-resume surface, Activity-to-Journal
-  review, mobile/responsive layout, search in workspace header.
+- UX polish is ongoing: Today flow as work-resume surface, mobile/responsive
+  layout, search in workspace header.
 - Production-grade packaging, auto-update, and release workflow is partial:
   build scripts exist, but not a polished update channel.
 - Sync operation-log retention/compaction is intentionally deferred.
@@ -161,7 +161,9 @@ Tasks:
 - [x] implement activity reconstruction and worklog suggestions;
 - [x] implement journal/worklog plugin that can consume activity suggestions.
 
-Status: done. Remaining work is UX depth (Today flow, reporting, timers).
+Status: done. The Journal reports on a period, by Deal and by billable
+time, and writes the report into the vault as Markdown or CSV. Remaining work
+is UX depth (Today flow, timers).
 
 ### Phase 5 - Browser Inbox
 

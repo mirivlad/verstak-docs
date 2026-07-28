@@ -62,8 +62,9 @@ Known remaining gaps:
 - Production-grade packaging, auto-update, and release workflow is partial:
   build scripts exist, but not a polished update channel.
 - Sync operation-log retention/compaction is intentionally deferred.
-- Secrets, plugin settings, Todo, Journal, Activity, and Browser Inbox are not
-  synchronized yet.
+- Secrets, plugin settings, Todo, Activity, and Browser Inbox are not
+  synchronized yet. Journal entries are ordinary vault files and travel with
+  every other file.
 - Browser extension chunked large-file capture is future work.
 - Automatic conflict resolution is intentionally absent.
 
@@ -137,8 +138,8 @@ Known limits:
 - [x] Files plugin API remains bounded to 2 MB text / 8 MB byte reads.
 - [x] External rename is represented as delete + create.
 - [ ] Operation-log retention/compaction is intentionally deferred.
-- [ ] Secrets, plugin settings, Todo, Journal, Activity, and Browser Inbox are
-  not synchronized.
+- [ ] Secrets, plugin settings, Todo, Activity, and Browser Inbox are not
+  synchronized. Journal entries live in the Deal as Markdown and sync as files.
 
 Status: core sync foundations complete. Retention and additional data domains
 are future milestones.

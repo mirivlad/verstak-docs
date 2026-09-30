@@ -280,7 +280,9 @@ Status: packaging scripts produce release artifacts, packages carry checksums
 that discovery verifies, diagnostics can be collected without a terminal, and
 the release has a checklist with a script behind the automatable half. Package
 signing and an auto-update channel are future work; both need a key and a
-distribution point that do not exist yet.
+distribution point that do not exist yet. Since desktop v0.2.9 the application
+can check GitHub Releases for a newer version (opt-in, off by default, nothing
+downloaded), and CI runs the Go tests on Windows.
 
 ## 5. Immediate Execution Order
 

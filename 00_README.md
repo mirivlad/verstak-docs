@@ -20,7 +20,7 @@
 
 Детальная документация по runtime:
 
-- [Plugin Runtime](../verstak-desktop/docs/PLUGIN_RUNTIME.md) — подробный reference по plugin lifecycle, API, contribution points.
+- [Plugin Runtime](https://github.com/mirivlad/verstak/blob/main/docs/PLUGIN_RUNTIME.md) — подробный reference по plugin lifecycle, API, contribution points.
 
 ## Главный архитектурный инвариант
 

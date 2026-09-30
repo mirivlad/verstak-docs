@@ -115,5 +115,5 @@ Verstak развивается как local-first платформа с дина
 - [ ] Sidecar/sandbox изоляция;
 - [ ] Production-grade packaging и автообновление;
 - [ ] Operation-log retention (sync server);
-- [ ] Синхронизация Secrets, plugin settings, Todo, Journal, Activity, Browser Inbox;
-- [ ] UX-полировка (Today flow, mobile layout, search в workspace header).
+- [ ] Синхронизация Secrets и plugin settings (Todo синхронизируется записями, Journal — обычными файлами vault; Activity и очередь Browser Inbox остаются на устройстве намеренно);
+- [ ] UX-полировка: Overview Дела как единый центр возобновления работы (вместо планировавшегося Today flow), mobile layout. Поиск с ограничением по открытому Делу сделан в v0.2.0.

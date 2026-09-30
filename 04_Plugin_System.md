@@ -1,6 +1,6 @@
 # Verstak Plugin System
 
-> Подробный reference по реализации: [Plugin Runtime](../verstak-desktop/docs/PLUGIN_RUNTIME.md).
+> Подробный reference по реализации: [Plugin Runtime](https://github.com/mirivlad/verstak/blob/main/docs/PLUGIN_RUNTIME.md).
 
 ## 1. Цель
 
@@ -446,4 +446,4 @@ verstak.notes-0.1.0.tar.gz
 - README;
 - checksums/signature later.
 
-Подробнее о сборке: [PACKAGING.md](../verstak-official-plugins/docs/PACKAGING.md).
+Подробнее о сборке: [PACKAGING.md](https://github.com/mirivlad/verstak-official-plugins/blob/main/docs/PACKAGING.md).

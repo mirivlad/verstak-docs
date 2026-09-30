@@ -49,6 +49,19 @@ Implemented:
 - automated Go, frontend, official plugin, SDK, and real-sync smoke checks;
 - tray icon with native menu and native desktop notifications;
 - AES-GCM secret store with master password, UI plugin.
+- Deal-only resource scope (v0.1.7): every provider resource is keyed by the
+  Deal UUID; Project is an optional Deal role with a global portfolio;
+  Milestones and Git are independent Deal plugins; templates are plugin-owned
+  recipes; the legacy nested Project model is migrated once and retired;
+- provider-independent capability operations between plugins (v0.1.4);
+- Deal Overview as the work-resume surface, fed by plugin Overview providers
+  (v0.1.3); paged Deal tool tabs and Deal-scoped global search (v0.2.0);
+- managed Git repositories per Deal with device-local checkouts and transient
+  Secret-backed credentials (v0.1.7);
+- CodeMirror-based notes editor with persistent history, note links, aliases,
+  backlinks and interactive reading (v0.2.4–v0.2.5);
+- tag-triggered desktop releases with the official plugins release pinned in
+  `OFFICIAL_PLUGINS_VERSION` (v0.2.6).
 
 Known remaining gaps:
 
@@ -57,8 +70,9 @@ Known remaining gaps:
   dedicated import runtime now indexes selected directories and supported
   archives, reads text up to 16 MiB and streams reviewed ordinary files into a
   staged transaction; chunked random access for plugin analysis is not exposed.
-- UX polish is ongoing: Today flow as work-resume surface, mobile/responsive
-  layout, search in workspace header.
+- UX polish is ongoing: the Deal Overview exists, but captures, Activity
+  worklog suggestions and Journal review are not yet one command center;
+  mobile/responsive layout.
 - Production-grade packaging and release workflow: build scripts, package
   checksums, diagnostics collection and a release checklist exist; a signed
   auto-update channel does not.
@@ -166,7 +180,7 @@ Tasks:
 
 Status: done. The Journal reports on a period, by Deal and by billable
 time, and writes the report into the vault as Markdown or CSV. Remaining work
-is UX depth (Today flow, timers).
+is UX depth (a single resume/review surface in the Deal Overview, timers).
 
 ### Phase 5 - Browser Inbox
 
@@ -278,9 +292,9 @@ distribution point that do not exist yet.
 6. [x] Browser inbox protocol, extension scaffold, local receiver, inbox plugin,
    and conversions.
 7. [x] Generic reviewed import runtime and official DokuWiki/Obsidian importer.
-8. [ ] Product UX follow-up: make the shell-level Today flow the command center
-   for captures, recent activity, Activity worklog suggestions, and Journal
-   import/review. This should reuse existing official plugin contracts instead
+8. [ ] Product UX follow-up: make the Deal Overview (the successor of the
+   planned Today flow) the command center for captures, recent activity,
+   Activity worklog suggestions, and Journal import/review. This should reuse existing official plugin contracts instead
    of moving Activity, Browser Inbox, or Journal into desktop core.
 
 ## 6. Stop Conditions

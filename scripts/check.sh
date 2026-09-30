@@ -38,7 +38,14 @@ for current, dirs, files in os.walk(root):
             resolved = os.path.normpath(
                 os.path.join(current, unquote(parts.path))
             )
-            if not os.path.exists(resolved):
+            # A link that leaves the repository resolves only on a machine
+            # with sibling checkouts; CI has none, so it was red for months
+            # while every local run passed. Cross-repo links use GitHub URLs.
+            if os.path.relpath(resolved, root).startswith('..'):
+                broken.append(
+                    f'{os.path.relpath(path, root)} -> {target} (outside this repository; use a GitHub URL)'
+                )
+            elif not os.path.exists(resolved):
                 broken.append(
                     f'{os.path.relpath(path, root)} -> {target}'
                 )

@@ -365,6 +365,23 @@ an interrupted transaction using its private journal. Cancellation is allowed
 during validation and staging, but not after publication begins; progress
 reports `validating`, `staging`, `publishing` and `refreshing` phases.
 
+### 11.2. Process API (Desktop v0.3.5)
+
+Capability `verstak/core/processes/v1` предоставляет общий `api.processes`:
+запуск с literal argv и рабочим каталогом, detached GUI, результат консольной
+команды, отмену и открытие HTTP(S)-ссылки. На стороне Go проверяются актуальное
+состояние плагина, capability и `process.spawn` либо `external.openURL`.
+Сохраняются ограничения времени и вывода; неявного shell нет.
+
+Разрешение плагина на Process API и доверие к сохранённой команде — разные
+механизмы. Actions управляет доверием к своим определениям через локальное
+хранилище вне vault; общий API не предоставляет обход проверки прав.
+`processes.confirm` только показывает подтверждение и не выдаёт разрешений.
+Frontend по-прежнему использует общий JS-контекст; новая модель не создаёт
+песочницу и не аутентифицирует враждебный код установленного плагина.
+
+Контракт и ограничения платформ: [Process API](https://github.com/mirivlad/verstak/blob/v0.3.5/docs/PROCESSES_API.md).
+
 ## 12. Trust Model
 
 Раздел описывает, что permissions на самом деле дают, а что нет. Без этого
